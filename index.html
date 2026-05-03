@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZenBreak – Votre pause mentale</title>
+  <meta name="description" content="ZenBreak est une application française de relaxation avec sons naturels, ASMR et fréquences apaisantes pour faire une pause, se détendre, se concentrer ou s’endormir." />
+  <meta name="keywords" content="ZenBreak, application relaxation, sons naturels, ASMR, sommeil, bruit de pluie, méditation, détente, stress, fréquences relaxantes" />
+  <meta name="author" content="Code Nature" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:title" content="ZenBreak – Relaxation, sommeil et sons naturels" />
+  <meta property="og:description" content="Faites une pause avec des sons naturels, ASMR et fréquences relaxantes. Une application française pensée pour ralentir, respirer et se détendre." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="images/zenbreak-preview.jpg" />
+  <meta property="og:url" content="https://code-nature81.github.io/ZenBreak/" />
+
+  <link rel="canonical" href="https://code-nature81.github.io/ZenBreak/" />
+  <link rel="icon" href="images/favicon.png" type="image/png" />
+
+  <style>
+    :root {
+      --bg: #060b1f;
+      --bg-soft: #0b1230;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #f8fbff;
+      --muted: #b9c4df;
+      --blue: #57a9ff;
+      --cyan: #6fffe9;
+      --purple: #8f7cff;
+      --gold: #ffd166;
+      --danger: #ff7b9c;
+      --radius: 26px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(87, 169, 255, 0.35), transparent 32%),
+        radial-gradient(circle at 85% 12%, rgba(143, 124, 255, 0.28), transparent 30%),
+        radial-gradient(circle at 50% 85%, rgba(111, 255, 233, 0.16), transparent 35%),
+        linear-gradient(180deg, #050816 0%, #071029 52%, #050816 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
+      background-size: 80px 80px, 140px 140px;
+      background-position: 0 0, 30px 50px;
+      opacity: 0.15;
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(100% - 36px, var(--max));
+      margin-inline: auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 8, 22, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.35rem;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 12px 35px rgba(87,169,255,0.35));
+    }
+
+    .brand-icon img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #031026;
+      box-shadow: 0 18px 45px rgba(87,169,255,0.35);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.16);
+      color: var(--text);
+    }
+
+    .hero {
+  padding: 28px 0 72px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 52px;
+  align-items: start;
+}
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      color: #dcecff;
+      background: rgba(87, 169, 255, 0.13);
+      border: 1px solid rgba(87, 169, 255, 0.24);
+      font-weight: 700;
+      font-size: .9rem;
+      margin-bottom: 22px;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 0 8px rgba(111,255,233,0.12);
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 6vw, 5.35rem);
+      line-height: .98;
+      letter-spacing: -0.07em;
+      max-width: 850px;
+      margin-bottom: 26px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff, #9fd3ff 42%, #6fffe9 72%, #d6ccff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.18rem;
+      max-width: 660px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .check {
+      color: var(--cyan);
+      font-weight: 900;
+    }
+
+    .phone-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .orbit {
+      position: absolute;
+      width: min(520px, 85vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      animation: spin 24s linear infinite;
+    }
+
+    .orbit::before,
+    .orbit::after {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 25px var(--cyan);
+    }
+
+    .orbit::before { top: 12%; left: 18%; }
+    .orbit::after { bottom: 16%; right: 14%; background: var(--purple); box-shadow: 0 0 25px var(--purple); }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .phone {
+      position: relative;
+      width: min(345px, 82vw);
+      border: 12px solid rgba(255,255,255,0.12);
+      border-radius: 42px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      z-index: 2;
+    }
+
+    .screen {
+      min-height: 610px;
+      border-radius: 31px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(111,255,233,0.22), transparent 28%),
+        linear-gradient(180deg, #101b46, #070c20);
+      border: 1px solid rgba(255,255,255,0.13);
+      padding: 26px 20px;
+    }
+
+    .screen-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255,255,255,0.72);
+      font-size: .78rem;
+      font-weight: 800;
+      margin-bottom: 28px;
+    }
+
+    .screen-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .screen-brand img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .meditation-circle {
+      width: 190px;
+      height: 190px;
+      margin: 18px auto 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle, rgba(111,255,233,0.22), rgba(87,169,255,0.08) 54%, transparent 72%);
+      border: 1px solid rgba(111,255,233,0.28);
+      box-shadow: 0 0 70px rgba(87,169,255,0.35);
+      animation: breathe 5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(.94); }
+      50% { transform: scale(1.04); }
+    }
+
+    .meditation-circle strong {
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+    }
+
+    .screen h2 {
+      text-align: center;
+      font-size: 1.55rem;
+      margin-bottom: 8px;
+    }
+
+    .screen p {
+      text-align: center;
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: 22px;
+    }
+
+    .sound-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .sound {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sound-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(87,169,255,0.17);
+      font-size: 1.1rem;
+    }
+
+    .sound div:last-child {
+      flex: 1;
+    }
+
+    .sound strong {
+      display: block;
+      font-size: .94rem;
+    }
+
+    .sound span {
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    section {
+      padding: 82px 0;
+    }
+
+    .section-heading {
+      max-width: 760px;
+      margin-bottom: 38px;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .78rem;
+      margin-bottom: 12px;
+    }
+
+    h2.section-title {
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 16px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 20px 55px rgba(0,0,0,0.18);
+      backdrop-filter: blur(18px);
+    }
+
+    .card-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(87,169,255,0.25), rgba(111,255,233,0.12));
+      margin-bottom: 20px;
+      font-size: 1.45rem;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      color: var(--muted);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .large-card {
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, transparent, rgba(0,0,0,.45)),
+        radial-gradient(circle at 50% 20%, rgba(111,255,233,.26), transparent 35%),
+        linear-gradient(135deg, rgba(87,169,255,.20), rgba(143,124,255,.20));
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.11);
+    }
+
+    .feature-item span {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(111,255,233,0.13);
+      color: var(--cyan);
+      font-weight: 900;
+    }
+
+    .feature-item h3 {
+      margin-bottom: 4px;
+      font-size: 1.05rem;
+    }
+
+    .feature-item p {
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .sounds-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .sound-chip {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.10);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: #edf6ff;
+    }
+
+    .sound-chip span {
+      font-size: 1.25rem;
+    }
+
+    .seo-block {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 34px;
+      padding: 42px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .seo-block p {
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+
+    .keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .keywords span {
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(87,169,255,0.12);
+      border: 1px solid rgba(87,169,255,0.18);
+      color: #dcecff;
+      font-weight: 700;
+      font-size: .88rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      counter-reset: steps;
+    }
+
+    .step {
+      counter-increment: steps;
+      position: relative;
+    }
+
+    .step::before {
+      content: "0" counter(steps);
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      font-weight: 900;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 22px;
+      padding: 20px 22px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 1.04rem;
+    }
+
+    details p {
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .cta {
+      text-align: center;
+      border-radius: 40px;
+      padding: 70px 32px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(111,255,233,.22), transparent 32%),
+        linear-gradient(135deg, rgba(87,169,255,.17), rgba(143,124,255,.17));
+      border: 1px solid rgba(255,255,255,.13);
+      box-shadow: var(--shadow);
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      max-width: 680px;
+      margin: 0 auto 28px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    footer {
+      padding: 38px 0 46px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .mobile-menu {
+      display: none;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 940px) {
+      .hero-grid,
+      .feature-grid,
+      .seo-block {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 54px;
+      }
+
+      .phone-wrap {
+        margin-top: 24px;
+      }
+
+      .cards,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .sounds-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 76px;
+        left: 18px;
+        right: 18px;
+        padding: 18px;
+        border-radius: 24px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        background: rgba(7, 12, 32, 0.96);
+        border: 1px solid rgba(255,255,255,0.12);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: inline-grid;
+        place-items: center;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(100% - 24px, var(--max));
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .sounds-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .screen {
+        min-height: 560px;
+      }
+
+      section {
+        padding: 62px 0;
+      }
+
+      .seo-block,
+      .card,
+      .cta {
+        padding: 26px;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ZenBreak",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Android",
+    "description": "Application française de relaxation avec sons naturels, ASMR et fréquences relaxantes pour faire une pause, se détendre, se concentrer ou s’endormir.",
+    "author": {
+      "@type": "Organization",
+      "name": "Code Nature"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#accueil" class="brand" aria-label="Accueil ZenBreak">
+        <div class="brand-icon">
+          <img src="logo.png" alt="Logo ZenBreak" />
+        </div>
+        ZenBreak
+      </a>
+
+      <button class="mobile-menu" id="mobileMenu" aria-label="Ouvrir le menu">☰</button>
+
+      <nav class="nav-links" id="navLinks" aria-label="Navigation principale">
+        <a href="#bienfaits">Bienfaits</a>
+        <a href="#sons">Sons</a>
+        <a href="#fonctionnement">Fonctionnement</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.codenature.zenbreak&pcampaignid=web_share" target="_blank" rel="noopener">Télécharger</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="accueil">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge"><span class="pulse"></span> Application française de relaxation</div>
+          <h1>Faites une pause. <span class="gradient-text">Respirez.</span> Repartez plus léger.</h1>
+          <p>
+            ZenBreak vous accompagne avec des sons naturels, ASMR et fréquences relaxantes pour vous détendre,
+            améliorer votre concentration ou préparer votre sommeil en quelques minutes.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.codenature.zenbreak&pcampaignid=web_share" target="_blank" rel="noopener">Télécharger sur Google Play</a>
+            
+          </div>
+
+          <div class="trust-row" aria-label="Avantages principaux">
+            <div class="trust-item"><span class="check">✓</span> Sons naturels</div>
+            <div class="trust-item"><span class="check">✓</span> Sessions courtes</div>
+            <div class="trust-item"><span class="check">✓</span> Ambiance galaxie</div>
+            <div class="trust-item"><span class="check">✓</span> Pensée pour mobile</div>
+          </div>
+        </div>
+
+        <div class="phone-wrap" aria-label="Aperçu de l’application ZenBreak">
+          <div class="orbit"></div>
+          <div class="phone">
+            <div class="screen">
+              <div class="screen-top">
+                <span class="screen-brand">
+                  <img src="logo.png" alt="Logo ZenBreak" />
+                  ZenBreak
+                </span>
+                <span>12:45</span>
+              </div>
+
+              <div class="meditation-circle">
+                <strong>05:00</strong>
+              </div>
+
+              <h2>Pause relaxation</h2>
+              <p>Lancez une ambiance, fermez les yeux et laissez le timer vous guider.</p>
+
+              <div class="sound-list">
+                <div class="sound">
+                  <div class="sound-icon">🌿</div>
+                  <div><strong>Sons ambiants</strong><span>Sons ambiants</span></div>
+                </div>
+                <div class="sound">
+                  <div class="sound-icon">🌀</div>
+                  <div><strong>Fréquences</strong><span>Fréquences</span></div>
+                </div>
+                <div class="sound">
+                  <div class="sound-icon">🎧</div>
+                  <div><strong>ASMR</strong><span>ASMR</span></div>
+                </div>
+                <div class="sound">
+                  <div class="sound-icon">🎶</div>
+                  <div><strong>Ahants diphoniques</strong><span>Chants diphoniques</span></div>
+                </div>
+                <div class="sound">
+                  <div class="sound-icon">🎹</div>
+                  <div><strong>Voyage musical</strong><span>Voyage musical</span></div>
+                </div>
+                <div class="sound">
+                  <div class="sound-icon">🎚️</div>
+                  <div><strong>Votre mix sonore</strong><span>Votre mix sonore</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bienfaits">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Pourquoi ZenBreak</div>
+          <h2 class="section-title">Une application pensée pour les vraies pauses du quotidien.</h2>
+          <p>
+            Pas besoin d’une longue séance. ZenBreak aide à créer un moment simple, rapide et apaisant,
+            à la maison, au travail, en voyage ou avant de dormir.
+          </p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">🌙</div>
+            <h3>Préparer le sommeil</h3>
+            <p>Des ambiances douces comme la pluie, le feu ou le ronronnement pour ralentir le rythme avant la nuit.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🧘</div>
+            <h3>Réduire la tension</h3>
+            <p>Des sessions courtes pour souffler, couper mentalement et retrouver une sensation de calme.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🎯</div>
+            <h3>Se recentrer</h3>
+            <p>Des sons immersifs pour accompagner la concentration, la lecture, le travail ou une pause entre deux tâches.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container feature-grid">
+        <article class="card large-card">
+          <div class="eyebrow">Expérience mobile</div>
+          <h2 class="section-title">Une interface immersive, simple et apaisante.</h2>
+          <p style="color: var(--muted);">ZenBreak mise sur une ambiance visuelle galaxie, un timer clair et des sons accessibles rapidement.</p>
+        </article>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <span>✓</span>
+             <div>
+              <h3>Sélectionnez une durée</h3>
+              <p>Une pause courte de 5 minutes ou une session plus longue pour accompagner le sommeil.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span>✓</span>
+            <div>
+              <h3>Choisissez votre son</h3>
+              <p>Ambiances naturelles, fréquences, ASMR ou chants diphoniques selon votre besoin du moment.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span>✓</span>
+            <div>
+              <h3>Laissez-vous guider</h3>
+              <p>Le son tourne en boucle pendant la session et un gong indique naturellement la fin du moment.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span>✓</span>
+            <div>
+              <h3>Compatible avec votre routine</h3>
+              <p>À utiliser avant de dormir, pendant une pause au travail, après le sport ou lors d’un moment de stress.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sons">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Ambiances sonores</div>
+          <h2 class="section-title">Des sons pour dormir, respirer et relâcher.</h2>
+          <p>
+            ZenBreak regroupe plusieurs univers sonores pour s’adapter à vos envies : 
+          </p>
+        </div>
+
+         <div class="sounds-grid">
+          <div class="sound-chip"><span>🌿</span> Sons ambiants</div>
+          <div class="sound-chip"><span>🎧</span> ASMR</div>
+          <div class="sound-chip"><span>🌀</span> Fréquences</div>
+          <div class="sound-chip"><span>🎶</span> Chants diphonique</div>
+          <div class="sound-chip"><span>🎹</span> Musiques instrumentales</div>
+          <div class="sound-chip"><span>🎚️</span> Votre mix sonore</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="fonctionnement">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Comment ça marche</div>
+          <h2 class="section-title">Trois gestes pour créer votre pause.</h2>
+        </div>
+
+        <div class="steps">
+            <article class="card step">
+            <h3>Lancez votre durée</h3>
+            <p>Définissez votre temps de relaxation et laissez le son accompagner toute la session.</p>
+          </article>
+          <article class="card step">
+            <h3>Choisissez une ambiance</h3>
+            <p>Sélectionnez un son naturel, ASMR,une fréquence ou autres selon votre objectif : dormir, souffler, vous concentrer.</p>
+          </article>
+          <article class="card step">
+            <h3>Revenez doucement</h3>
+            <p>Un signal sonore indique la fin de la pause pour reprendre votre journée sans coupure brutale.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Questions fréquentes</div>
+          <h2 class="section-title">Tout savoir avant de télécharger ZenBreak.</h2>
+        </div>
+
+        <div class="faq">
+          <details>
+            <summary>ZenBreak est-elle une application de méditation ?</summary>
+            <p>ZenBreak est surtout une application de pause, de relaxation et d’ambiance sonore. Elle peut accompagner une méditation, une respiration calme ou un moment de détente.</p>
+          </details>
+          <details>
+            <summary>Quels sons trouve-t-on dans ZenBreak ?</summary>
+            <p>L’application propose des sons naturels comme la pluie, le vent, les oiseaux, le feu, le ruisseau, mais aussi des sons ASMR, des fréquences relaxantes, des chants diphoniques et des musiques instrumentales.</p>
+          </details>
+          <details>
+            <summary>Peut-on utiliser ZenBreak pour dormir ?</summary>
+            <p>Oui. Les sons doux et répétitifs peuvent accompagner une routine du soir et créer une ambiance plus calme avant l’endormissement.</p>
+          </details>
+          <details>
+            <summary>ZenBreak est-elle gratuite ?</summary>
+            <p>Oui, l'application ZenBreak est gratuite.</p>
+          </details>
+          <details>
+            <summary>L’application fonctionne-t-elle hors ligne ?</summary>
+            <p>Oui, une fois le compte a redourd lancé vous pouvez passer en mode avion.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="cta">
+          <h2>Prêt à faire une vraie pause ?</h2>
+          <p>
+            Téléchargez ZenBreak et créez votre bulle de calme en quelques secondes avec des sons naturels,
+            ASMR, fréquences relaxantes, chants diphoniques, musiques instrumentales.
+          </p>
+          <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.codenature.zenbreak&pcampaignid=web_share" target="_blank" rel="noopener">Télécharger ZenBreak</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <strong>ZenBreak</strong> — Une application Code Nature<br />
+        <small>Relaxation, sommeil, sons naturels et pauses bien-être.</small>
+      </div>
+      <div class="footer-links">
+        <a href="#bienfaits">Bienfaits</a>
+        <a href="#sons">Sons</a>
+        <a href="#faq">FAQ</a>
+        <a href="mailto:contact@code-nature.fr">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const mobileMenu = document.getElementById('mobileMenu');
+    const navLinks = document.getElementById('navLinks');
+
+    mobileMenu.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      mobileMenu.textContent = navLinks.classList.contains('open') ? '×' : '☰';
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        mobileMenu.textContent = '☰';
+      });
+    });
+  </script>
+</body>
+</html>
