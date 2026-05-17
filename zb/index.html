@@ -1,0 +1,130 @@
+<!--
+ZenBreak - Licence MIT (ou Tous droits réservés)
+© 2025 Code-Nature81
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZenBreak - Accueil</title>
+  <link rel="preload" as="image" href="fondecran.png">
+
+  <!-- Lien vers le manifest PWA -->
+  <link rel="manifest" href="/manifest.json">
+
+
+  <!-- Couleur de la barre d’état (Android) -->
+  <meta name="theme-color" content="#0277bd" />
+
+  <!-- Icônes pour les différents usages -->
+  <link rel="apple-touch-icon" sizes="180x180" href="logo1.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="logo1.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="logo1.png" />
+
+  <!-- Ton fichier CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  
+</head>
+
+
+<body>
+   
+
+  <video id="background-video" autoplay loop muted playsinline preload="auto" 
+  poster="fondecran.png">
+  <source src="https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/video%2F121805-724719819_tiny.mp4?alt=media&token=14a9cbdf-93de-43c1-ac15-b2f15b9cdd6f" type="video/mp4">
+</video>
+
+  <div class="container">
+    <img src="logo1.png" alt="Logo ZenBreak" style="width:150px; margin-bottom: 20px;" />
+    <h1>Bienvenue sur ZenBreak</h1>
+    <p style="color: white;">🧘‍♂️ Une pause relaxante à portée de clic</p>
+    <a href="choix-duree.html"><button>Commencer une pause</button></a>
+    
+    
+  
+<footer>
+      <p>&copy; 2025 ZenBreak-app | code.nature | Tous droits réservés <a href="privacy-policy.html"  style="text-decoration:none;color:#777;">|Politique de confidentialité |</a></p>
+  </footer>
+
+   <script>
+  const backgroundVideo = document.getElementById("background-video");
+
+  backgroundVideo.addEventListener("canplay", () => {
+    backgroundVideo.classList.add("video-ready");
+  });
+</script>
+
+
+<script type="module" src="js/firebase-init.js"></script>
+
+</body>
+
+<script>
+ 
+  // Service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Service Worker actif"))
+        .catch(err => console.log("❌ Service Worker erreur :", err));
+    });
+  }
+
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(registration => {
+      registration.onupdatefound = () => {
+        const newWorker = registration.installing;
+
+        newWorker.onstatechange = () => {
+          if (newWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // Une nouvelle version est disponible
+              showUpdatePopup();
+            }
+          }
+        };
+      };
+    });
+
+  let refreshing;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    window.location.reload();
+    refreshing = true;
+  });
+}
+
+function showUpdatePopup() {
+  const popup = document.createElement('div');
+  popup.id = "update-popup";
+  popup.innerHTML = `
+    <div class="popup-overlay">
+      <div class="popup-content">
+        <h2>🆕 Mise à jour disponible</h2>
+        <p>Une nouvelle version de l’application est disponible.</p>
+        <button id="update-app-btn">Mettre à jour</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  document.getElementById('update-app-btn').addEventListener('click', () => {
+    navigator.serviceWorker.getRegistration().then(reg => {
+      if (reg.waiting) {
+        reg.waiting.postMessage('SKIP_WAITING');
+      }
+    });
+  });
+}
+</script>
+
+ 
+
+
+
+</html>

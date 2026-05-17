@@ -1,0 +1,1404 @@
+
+<!--
+ZenBreak - Licence MIT (ou Tous droits réservés)
+© 2025 Code-Nature81
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZenBreak - Choix du son</title>
+  <link rel="preload" as="image" href="fondecran.png">
+
+
+  
+  <style>
+   body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  background-color: #06152f;
+  background-image: url("fondecran.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  color: #0277bd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+#background-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#background-video.video-ready {
+  opacity: 1;
+}
+h1{
+  color: white;
+  text-align: center;
+}
+  .btn-group {
+      display:flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    
+    }
+
+    .btn-group button {
+      background: linear-gradient(to right, #0288d1, #26c6da);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      
+    }
+
+    .btn-group button:hover {
+      background-color: #1e6ea4;
+    }
+
+    #additionText {
+  background: rgba(5, 49, 93, 0.893); /* un bleu léger transparent */
+  color: #ffffff; /* bleu doux */
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-style: italic;
+  font-weight: 500;
+  max-width: 350px;
+  margin: 0 auto 12px auto; /* centré horizontalement avec marge en bas */
+  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.25);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+    .grid {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+.btn-group button.active {
+  outline: none;
+  border-radius: 10px;
+  border: 3px solid #00bfff;
+  box-shadow: 0 0 12px rgba(0, 191, 255, 1.9);
+  background-color: rgba(0, 191, 255, 0.35);
+  color: #ffffff;
+}
+
+    .sound-option {
+      background-color: #183152;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sound-option img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .sound-option.active {
+      outline: 3px solid #2c9bd1;
+    }
+
+    .validate-btn {
+      background: linear-gradient(to right, #0288d1, #26c6da);
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+   .plus-button {
+  position: absolute;
+  bottom: 30px;
+  right: 10px;
+  z-index: 2;
+  padding: 6px 10px;
+  background-color: #26c6da;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+  .plus-button.selected {
+    background-color: green;
+  }
+
+  .volume-slider {
+  width: 80%;
+  margin: 10px auto;
+  display: block;
+  accent-color: #00bfa5; /* turquoise doux */
+}
+
+
+  #validateAddition {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+     background: linear-gradient(to right, #0288d1, #26c6da);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+#session {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* place le cercle en haut */
+  height: 100vh;
+  padding-top: 60px; /* espace depuis le haut */
+}
+
+
+@keyframes breathing {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+#meditationCircle {
+  width:100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #2196F3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  background: radial-gradient(circle, #0d48a1b5 30%, #05417da0 100%);
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.6);
+  animation: breathing 6s ease-in-out infinite;
+}
+
+#timer {
+  color: rgba(255, 255, 255, 0.771);
+  font-size: 2em;
+  font-weight: italic;
+  display: none;
+}
+
+
+    .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 20, 20, 0.95);
+  color: #fff;
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.overlay1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 20, 20, 0.95);
+  color: #fff;
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+
+.overlay-content {
+  max-width: 90%;
+  width: 100%;
+  max-height: 90%;
+  background: #222;
+  padding: 30px 20px 20px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.4);
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.overlay-content1 {
+  max-width: 90%;
+  width: 100%;
+  max-height: 90%;
+  background: linear-gradient(70deg, rgb(38, 0, 255), rgb(148, 5, 243));
+  padding: 30px 20px 20px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.overlay h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.overlay p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.overlay1 p {
+  font-size: 18px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #e5eaea00;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dont-show-button {
+  margin-top: 18px;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to right, #0288d1, #26c6da);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dont-show-button:hover {
+  background: linear-gradient(to right, #0277bd, #00acc1);
+}
+.sound-option {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #183152;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sound-option .title-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(44, 155, 209, 0.85);
+  color: white;
+  font-weight: bold;
+  padding: 2px 2px;
+  font-size: 0.65rem;
+  text-align: center;
+  z-index: 2;
+}
+.offline-status {
+  display: none;
+  margin: 12px auto 18px auto;
+  padding: 12px 16px;
+  max-width: 520px;
+  border-radius: 14px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: rgba(5, 49, 93, 0.88);
+  border: 1px solid rgba(120, 190, 255, 0.45);
+  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.25);
+  backdrop-filter: blur(8px);
+}
+
+.offline-status.loading {
+  display: block;
+}
+
+.offline-status.ready {
+  display: block;
+  background: rgba(0, 120, 90, 0.88);
+}
+
+.offline-status.error {
+  display: block;
+  background: rgba(150, 40, 40, 0.88);
+}
+
+
+
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+        
+      }
+    }
+
+    @media (max-width: 600px) {
+  .overlay-content {
+    font-size: 16px;
+    padding: 20px 15px 15px;
+  }
+
+  .overlay h2 {
+    font-size: 20px;
+  }
+
+  .overlay p {
+    font-size: 16px;
+  }
+}
+
+    footer {
+  text-align: center;
+  margin-top: 370px;
+  font-size: 0.9em;
+  color: #777;
+  font-weight: 300;
+  position: relative;
+   bottom: 0;
+}
+  </style>
+</head>
+<body>
+<video id="background-video" autoplay loop muted playsinline preload="auto" 
+ poster="fondecran.png">
+  <source src="https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/video%2F121805-724719819_tiny.mp4?alt=media&token=14a9cbdf-93de-43c1-ac15-b2f15b9cdd6f" type="video/mp4">
+</video>
+
+  <h1>🎧 Choisissez votre catégorie sonore</h1>
+
+  <div id="offlineStatus" class="offline-status" aria-live="polite"></div>
+
+
+    <div class="btn-group">
+  <button onclick="showSounds('ambiance')">Ambiances sonores</button>
+  <button onclick="showSounds('frequence')">Fréquences</button>
+  <button onclick="showSounds('asmr')">ASMR</button>
+  <button onclick="showSounds('diphonique')">Chants diphoniques</button>
+  <button onclick="showSounds('musique')">Voyage musical</button>
+  <button onclick="showSounds('addition')">➕ Votre mix sonore</button>
+  <button id="btnInfoFrequence" style="display:none; margin-top: 25px;background: linear-gradient(70deg, rgb(38, 0, 255), rgb(148, 5, 243));" class="grid">
+  Découverte des fréquences &nbsp;&nbsp;>
+</button>
+
+
+</div>
+
+<div id="ambiance" class="grid"></div>
+<button id="btnInfoFrequence" style="display:none;" class="grid">
+  Découvrir fréquence
+</button>
+<div id="frequence" class="grid"></div>
+<div id="asmr" class="grid"></div>
+<div id="diphonique" class="grid"></div>
+<div id="musique" class="grid"></div>
+<p id="additionText" style="display:none; margin-bottom: 5px;">"Dans cette catégorie, tu deviens l’architecte de ta sérénité. Assemble, additionne, gère le volume des sons pour créer ton propre univers relaxant et unique. Laisse-toi porter par les harmonies que tu crées."</p>
+<button id="validateAddition" onclick="validateAddition()" style="display: none;">Valider</button>
+
+<div id="addition" class="grid"></div>
+
+
+
+
+
+
+
+
+
+<div id="infoFrequence" class="overlay1" style="display:none; ">
+  <div class="overlay-content1">
+    <button class="close-button" onclick="closeOverlay()">✖</button>
+  <h2 style="font-style:italic; text-align:center">Fréquences</h2>
+  <p style="text-align: justify">174 HERTZ &nbsp;&nbsp;  Réduit le stress</p>
+  <p style="text-align: justify">285 HERTZ &nbsp;&nbsp;  Favorise la guérison</p>
+  <p style="text-align:justify">396 HERTZ &nbsp;&nbsp; Libère les blocages</p>
+  <p style="text-align:justify">417 HERTZ &nbsp;&nbsp; Nettoie traumatismes </p>
+  <p style="text-align:justify">432 HERTZ &nbsp;&nbsp; Harmonise le corps</p>
+  <p style="text-align:justify">528 HERTZ &nbsp;&nbsp; Répare le corps</p>
+  <p style="text-align:justify">639 HERTZ &nbsp;&nbsp; Améliore les relations</p>
+  <p style="text-align:justify">741 HERTZ &nbsp;&nbsp;  Stimule l'intuition</p>
+  <p style="text-align:justify">852 HERTZ &nbsp;&nbsp; Eveille la spiritualité</p>
+  <p style="text-align:justify">963 HERTZ &nbsp;&nbsp; Connexion à l'univers</p>
+  
+</div>
+</div>
+
+
+  
+</div>
+
+<div id="session" style="display: none; flex-direction: column; align-items: center;">
+  <div id="meditationCircle">
+    <div id="timer">00:00</div>
+  </div>
+</div>
+
+
+<audio id="audioPlayer" loop></audio>
+<audio id="gong" src="https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fgong.mp3?alt=media&token=c1f9913b-e7cf-49b0-a7d2-143690ace6fc"></audio>
+
+
+ <div id="infoOverlay" class="overlay">
+  <div class="overlay-content">
+    <button class="close-button" onclick="closeOverlay()" style="color: white;">✖</button>
+    <h2>Écoute hors ligne</h2>
+    <p>
+      Les sons restent en ligne pour garder ZenBreak légère.<br>
+      Une fois écoutés avec internet, ils peuvent être relus hors ligne.
+    </p>
+    <button class="dont-show-button" onclick="hideInfoOverlayForever()">Ne plus voir</button>
+  </div>
+</div>
+
+
+
+  <script>
+let currentAudio = null;
+  let selectedSound = null;
+  let timerInterval;
+  let offlineStatusTimeout = null;
+
+  function afficherStatutHorsLigne(message, type = "loading", autoHide = false) {
+    const status = document.getElementById("offlineStatus");
+    if (!status) return;
+
+    if (offlineStatusTimeout) {
+      clearTimeout(offlineStatusTimeout);
+      offlineStatusTimeout = null;
+    }
+
+    status.textContent = message;
+    status.className = `offline-status ${type}`;
+
+    if (autoHide) {
+      offlineStatusTimeout = setTimeout(() => {
+        status.style.display = "none";
+        status.className = "offline-status";
+        status.textContent = "";
+      }, 3500);
+    }
+  }
+
+  const MEDIA_CACHE_NAME = "zenbreak-media-v42";
+  const AUDIO_DB_NAME = "zenbreak-audio-db";
+  const AUDIO_STORE_NAME = "sons";
+
+  function ouvrirBaseAudio() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(AUDIO_DB_NAME, 1);
+
+      request.onupgradeneeded = event => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains(AUDIO_STORE_NAME)) {
+          db.createObjectStore(AUDIO_STORE_NAME, { keyPath: "url" });
+        }
+      };
+
+      request.onsuccess = event => resolve(event.target.result);
+      request.onerror = event => reject(event.target.error);
+    });
+  }
+
+  async function lireAudioHorsLigne(url) {
+    if (!url || !("indexedDB" in window)) {
+      return null;
+    }
+
+    const db = await ouvrirBaseAudio();
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(AUDIO_STORE_NAME, "readonly");
+      const store = transaction.objectStore(AUDIO_STORE_NAME);
+      const request = store.get(url);
+
+      request.onsuccess = () => {
+        resolve(request.result ? request.result.blob : null);
+      };
+
+      request.onerror = event => reject(event.target.error);
+    });
+  }
+
+  async function sauvegarderAudioHorsLigne(url, blob) {
+    if (!url || !blob || !("indexedDB" in window)) {
+      return;
+    }
+
+    const db = await ouvrirBaseAudio();
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(AUDIO_STORE_NAME, "readwrite");
+      const store = transaction.objectStore(AUDIO_STORE_NAME);
+
+      store.put({
+        url: url,
+        blob: blob,
+        date: Date.now()
+      });
+
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = event => reject(event.target.error);
+    });
+  }
+
+  function estAudio(url) {
+    return typeof url === "string" && (
+      url.toLowerCase().includes(".mp3") ||
+      url.toLowerCase().includes(".wav") ||
+      url.toLowerCase().includes(".ogg")
+    );
+  }
+
+  async function mettreImageEnCacheHorsLigne(url) {
+    if (!url || !("caches" in window) || !navigator.onLine) {
+      return;
+    }
+
+    try {
+      const cache = await caches.open(MEDIA_CACHE_NAME);
+      const dejaEnCache = await cache.match(url);
+
+      if (dejaEnCache) {
+        return;
+      }
+
+      const response = await fetch(url, {
+        mode: "no-cors",
+        cache: "reload"
+      });
+
+      await cache.put(url, response.clone());
+      console.log("Image mise en cache :", url);
+    } catch (error) {
+      console.warn("Image non mise en cache :", url, error);
+    }
+  }
+
+  async function mettreAudioEnCacheHorsLigne(url) {
+    if (!url || !navigator.onLine) {
+      return;
+    }
+
+    try {
+      const audioDejaEnregistre = await lireAudioHorsLigne(url);
+      if (audioDejaEnregistre) {
+        afficherStatutHorsLigne("✅ Son prêt pour le hors ligne", "ready", true);
+        console.log("Son déjà enregistré hors ligne :", url);
+        return;
+      }
+
+      afficherStatutHorsLigne("⏳ Son en préparation hors ligne...", "loading", false);
+      console.log("Téléchargement complet du son :", url);
+
+      const response = await fetch(url, {
+        mode: "cors",
+        credentials: "omit",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("Téléchargement impossible : " + response.status);
+      }
+
+      const blob = await response.blob();
+
+      await sauvegarderAudioHorsLigne(url, blob);
+
+      if ("caches" in window) {
+        const cache = await caches.open(MEDIA_CACHE_NAME);
+        await cache.put(url, new Response(blob, {
+          status: 200,
+          statusText: "OK",
+          headers: {
+            "Content-Type": response.headers.get("Content-Type") || "audio/mpeg"
+          }
+        }));
+      }
+
+      afficherStatutHorsLigne("✅ Son prêt pour le hors ligne", "ready", true);
+      console.log("Son enregistré hors ligne :", url);
+    } catch (error) {
+      afficherStatutHorsLigne("⚠️ Son non préparé pour le hors ligne. Réessayez avec internet.", "error", true);
+      console.error("Erreur mise en cache audio :", error);
+    }
+  }
+
+  async function mettreMediaEnCacheHorsLigne(url) {
+    if (!url) {
+      return;
+    }
+
+    if (estAudio(url)) {
+      mettreAudioEnCacheHorsLigne(url);
+    } else {
+      mettreImageEnCacheHorsLigne(url);
+    }
+  }
+
+  async function obtenirUrlLectureAudio(url) {
+    if (!url) {
+      return url;
+    }
+
+    if (!navigator.onLine) {
+      try {
+        const blob = await lireAudioHorsLigne(url);
+
+        if (blob) {
+          afficherStatutHorsLigne("✅ Son disponible hors ligne", "ready", true);
+          return URL.createObjectURL(blob);
+        }
+
+        afficherStatutHorsLigne("⚠️ Ce son n'est pas encore disponible hors ligne", "error", true);
+        alert("Ce son n'est pas encore disponible hors ligne. Lancez-le une première fois avec internet.");
+        return null;
+      } catch (error) {
+        console.error("Erreur lecture audio hors ligne :", error);
+        return null;
+      }
+    }
+
+    mettreAudioEnCacheHorsLigne(url);
+    return url;
+  }
+
+  function closeOverlay() {
+    document.getElementById("infoOverlay").style.display = "none";
+    document.getElementById("infoFrequence").style.display = "none";
+  }
+
+  function hideInfoOverlayForever() {
+    localStorage.setItem("zenbreakInfoOverlayHidden", "true");
+    document.getElementById("infoOverlay").style.display = "none";
+  }
+
+  window.addEventListener('load', () => {
+    if (localStorage.getItem("zenbreakInfoOverlayHidden") !== "true") {
+      document.getElementById("infoOverlay").style.display = "flex";
+    }
+  });
+
+ 
+
+
+  const ambianceSounds = [
+    { name: "Campagne", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcampagne.png?alt=media&token=52ac1809-2c19-4dd4-a48f-cf1234493567", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FCampagne.mp3?alt=media&token=50ecb936-6feb-4221-bfdc-cfc090fad1cc" },
+    { name: "Mer & Mouettes", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fmer%20et%20mouettes.png?alt=media&token=0e0a4df1-7484-4e4f-b223-860a69cf3009", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBSea_Mer-vagues.mp3?alt=media&token=2b012f09-a43b-4cb5-beed-9ffd71c52599" },
+    { name: "Oiseaux", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fbird.png?alt=media&token=758dd188-66ca-4db7-b5ce-e29db0dc8ee2", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBBird_Oiseaux.mp3?alt=media&token=1958ebb6-4924-4880-bbca-e290ff0bac5b" },
+    { name: "Cigales", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcigales.png?alt=media&token=02087875-6f02-49a5-a17b-e62d77300ced", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FANMLInsc_Cigales.mp3?alt=media&token=cd178f79-b415-4cd6-9e71-983e5f884c59" },
+    { name: "Grenouille", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fgrenouille.png?alt=media&token=5acd5094-3a6b-4b68-a73a-7d58c2a1670e", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Ffrogs-and-insects-241048.mp3?alt=media&token=7f3a1189-14a9-48f9-a9f1-2b5c9c9b236e" },
+    { name: "Forêt", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fforet.png?alt=media&token=45a8f70b-7641-4c1f-8c3b-8a71b1d4fdc8", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBForst_Foret.mp3?alt=media&token=744eaeb0-8be0-4712-ae49-87657b59c98b" },
+    { name: "Ruisseau", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fruisseau.jpg?alt=media&token=096ea5db-73f0-428f-b3bb-e1a55719aae4", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBForst_ruisseau.mp3?alt=media&token=02a1813f-e35c-4f23-9f2b-06427423017d" },
+    { name: "Mer & vagues", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvague.jpg?alt=media&token=aa9c398f-2efa-4df6-8621-53e52782cc06", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FWATRWave_Mer_vagues.mp3?alt=media&token=a275a965-13a0-4f20-a662-670c00b48d17" },
+    { name: "Pluie d'été", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpluiedete.jpg?alt=media&token=bf7efada-8a36-494f-aa76-0f4919c9ed01", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FRAINConc_Pluie-dete.mp3?alt=media&token=3dca05db-1a80-47e4-a36d-d0a7d0ec8747" },
+    { name: "Pluie & orage", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpluieorange.jpg?alt=media&token=71c7b4b8-1bec-465e-a775-735aa354aa67", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FSTORM_Pluie-orage.mp3?alt=media&token=08f7b379-4627-4695-93f6-395f8fbce3f1" },
+    { name: "Tonnerre", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ftonerre.jpg?alt=media&token=84657a8a-ec2a-4736-8133-a8de5ae3722d", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FTHUN_Tonnerre.mp3?alt=media&token=ba3c543f-7aa6-427e-8172-7e92d05bfd6b" },
+    { name: "Vent", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvent.jpg?alt=media&token=b86b87c6-8bd3-4781-92f7-f2a3f2be80de", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FWINDDsgn_Vent.mp3?alt=media&token=ddc48d59-7c9d-4c6d-a613-9fef2452be71" },
+    { name: "Grotte", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fgrotte.png?alt=media&token=a700ee46-a65a-4f40-83e3-0315989aa0cb", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBUndr_Grotte.mp3?alt=media&token=657b19cd-0bae-447a-97b5-5a549075a9bc" },
+    { name: "Feu", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ffeu.png?alt=media&token=d73a5993-d22c-4ce7-8713-0c9a1eeab1b0", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fcamp-fire-1-228497.mp3?alt=media&token=934f160a-7197-47e2-841b-8ed33014d8b1" },
+    { name: "Feu-d'artifice", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ffireworks.png?alt=media&token=4a87373e-c6d7-44b4-8028-e0690d4e4a8d", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fefx_fogos_fireworks-72223.mp3?alt=media&token=7ff04c55-aa75-41aa-bc8d-931c14b1cdb3" },
+    { name: "Village", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvillage.jpg?alt=media&token=1c7868be-17f8-4e03-b9ae-b9c426ebf5a9", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fvillage.mp3?alt=media&token=ca983c54-e357-4cf9-a827-46987e351094" },
+    { name: "Usine", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fusine.jpg?alt=media&token=107ab5f1-1dda-47a9-8272-acd5023a76e1", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fconstruction-work-asmr-124715.mp3?alt=media&token=d1622650-06d7-4430-b94b-6915ae8586da" },
+    { name: "Sous-marin", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fsous.jpg?alt=media&token=dba2fe8f-db09-4bdc-acb1-ba60526af630", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fsous-marin.mp3?alt=media&token=07fcd174-bee0-420e-b34a-4489766c3605" }
+    
+  ];
+
+  const frequenceSounds = [
+    { name: "174 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F174-hz-pain-release-156261.mp3?alt=media&token=17b36e01-d6aa-49ed-b282-02a29cf1a9ea"},
+    { name: "285 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F285-hz-tissue-and-organ-healing-156262.mp3?alt=media&token=2b226de0-5374-427b-8c2d-65413841ec29"},
+    { name: "396 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F396-hz-root-chakra-156263.mp3?alt=media&token=be603daa-fbbf-4402-98dd-cddb45cd8b49"},
+    { name: "417 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F417-hz-sacral-chakra-156264.mp3?alt=media&token=cf10dc8f-9248-4984-84b8-e3e81052b08e"},
+    { name: "432 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F432-hz-tune-in-with-nature-156265.mp3?alt=media&token=5b478797-b0b7-4d77-b762-1c8f428e8014" },
+    { name: "528 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F528-hz-solar-plexus-156266.mp3?alt=media&token=26e46896-f7ba-43b1-a062-d7bacf379c24" },
+    { name: "639 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F639-hz-heart-chakra-156267.mp3?alt=media&token=aa445ece-a5c8-4520-a486-d8e23541c679" },
+    { name: "741 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F741hz-throat-chakra-balancing-fostering-honest-expressions-157686.mp3?alt=media&token=a9fe4ea5-6f50-4610-9357-9de52c9c984f" },
+    { name: "852 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F852hz-third-eye-awakening-unleashing-intuition-clairvoyance-157687.mp3?alt=media&token=5d8bbf26-0e0e-49ec-80ec-61b8c3975668" },
+    { name: "963 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F963hz-crown-chakra-healing-vibrational-harmonics-for-awakening-157688.mp3?alt=media&token=97409038-5481-46d9-b099-a6d685a48479" }
+  ];
+
+  const asmrSounds = [
+    { name: "Ronronnements", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fchat.png?alt=media&token=44618bb1-a70f-443f-be94-ffe733eba1dc", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fpurring-cat_01-63402.mp3?alt=media&token=50c0d562-c7f1-4269-a5cd-d297e9c33980" },
+    { name: "Pulsations", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpuls.jpg?alt=media&token=1e8280f5-e4c0-4994-8c68-dc392ce40fb9", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fheartbeat-241465.mp3?alt=media&token=084bc74b-a868-4ed2-b5af-5b4cdfa86c64" },
+    { name: "Pas dans la neige", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fneige.png?alt=media&token=598253aa-5c80-4b93-bded-c2311b8149ee", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FFOLYFeet_Pas%20dans%20la%20neige%203%20(ID%203363)_LS.mp3?alt=media&token=e1d8ea6f-f6e1-40ab-8929-deac1b613701" },
+    { name: "Pages", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpage.jpg?alt=media&token=be52af69-954c-4849-bdf3-e041aae075c3", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fflipping-pages-236732.mp3?alt=media&token=e890fe96-c2d9-4b5e-a37d-6b0ff805763c" },
+    { name: "Ecriture ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fecritue.png?alt=media&token=fdce5c46-3a16-43da-a47c-fd55b4c16621", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fpencil-write-desk-paper-loop-3-215731.mp3?alt=media&token=9cf565ae-dcab-4417-b431-fb112eb339cc" },
+    { name: "Coloriage ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcoloriage.png?alt=media&token=e69bc2f0-0183-4ee8-ba0f-32ca200c4a95", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fpencil-crayon-foley-coloring-1-200907.mp3?alt=media&token=f2a243c8-033b-44a4-98a3-f857c356310d" },
+    { name: "Ciseaux ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fciseaux.png?alt=media&token=dc998385-fe44-420f-a026-67a2e10fd2a0", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fscissors-43438.mp3?alt=media&token=73b062a7-522f-4f65-a0eb-697010b3bf6d" },
+    { name: "Papier froissé ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpapier.jpg?alt=media&token=cc2411ff-0ce4-4cd2-9967-1f80f4c45e4a", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fplastic-bag-crinkle-55362.mp3?alt=media&token=ba79cc92-7f9c-4b45-a101-277b90ae14c9" },
+    { name: "Clavier ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fclavier.png?alt=media&token=a72aa999-7d41-4f60-9be6-3421fdda7dfd", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fkeyboard-sound-satisfying-304411.mp3?alt=media&token=f0bb208a-eda8-4fb7-814f-0076a098a8d5" },
+    { name: "Ventilateur ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fventilateur.jpg?alt=media&token=90f21208-97d7-47ef-8c78-c7f24c074b95", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fcomputer-humming-236384.mp3?alt=media&token=fc376581-e0fc-4757-bc0c-2e608ab33107" },
+    { name: "Séche cheveux", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcheveux.png?alt=media&token=b56a2f16-8492-4a0f-9534-b8c67ca46281", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fhairdryer_low-108357.mp3?alt=media&token=2ea5f1e0-3ac5-4156-a6ed-71fb9a95971a" },
+    { name: "Craquement vinyle", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvinyl.jpg?alt=media&token=43469774-98ab-4729-9609-1601bf741f1c", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fold-vinyl-record-crackle-194006.mp3?alt=media&token=3f08bc9a-3ee3-4922-85ef-927ed25c4da6" },
+    { name: "Turbine", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fturbine.jpg?alt=media&token=950ca6e7-0e5c-4ac7-8c67-07e52ba4d3ae", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fturbine-oscillations-18250.mp3?alt=media&token=fd8954f0-f3e4-4297-8b5a-97d63512145b" },
+    { name: "Moteur", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fmoteur.png?alt=media&token=db60d4cc-5ef4-4f81-8aaf-0c7df5b524ab", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fbus_growl.mp3?alt=media&token=fa55e0c2-6eda-47a0-9085-eaf49faa4319" },
+    { name: "Hélicoptère", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fhelicop.png?alt=media&token=cc7a8dd9-ce82-4636-95d7-81e772edd2da", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fhelicopter-sound-effect-241421.mp3?alt=media&token=6e1bde5d-71f0-4029-89f8-a0456860a2c0" }
+  ];
+
+  const diphoniqueSounds = [
+    { name: "DO", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-do.mp3?alt=media&token=817c6c05-f624-4d4d-9559-8caedb900598" },
+    { name: "RE", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-re.mp3?alt=media&token=05118237-c19d-466e-a6aa-3b89662fb50e" },
+    { name: "MI", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-mi.mp3?alt=media&token=f6b173ae-0fc0-4c78-80d6-1bbe2433ca8f" },
+    { name: "FA", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-fa.mp3?alt=media&token=6cf7310b-9b23-4ce0-a408-0f80f6cf45ed" },
+    { name: "SOL", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-sol.mp3?alt=media&token=f171350e-c95c-4737-a38e-ae6a1d68ef52" },
+    { name: "LA", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-la.mp3?alt=media&token=3eafb740-5752-42f2-a449-2dcd1ff6f248" }
+    ];
+
+ const musiqueSounds = [
+    { name: "Calme/morphé", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fplume.jpg?alt=media&token=035b54ae-1cae-4319-acbb-77d5302f16ae", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Ffree-royalty-zen-calm-deep-meditation-and-sleep-music-191592.mp3?alt=media&token=07ac6e0b-ad98-41e9-9f14-ec157d785237" },
+    { name: "Zen Oasis", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Foasis.jpg?alt=media&token=be6cccb0-3a75-4289-b029-241d1cfabb8c", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fzen-oasis-165858.mp3?alt=media&token=d9e8ec61-b83e-480c-b40d-cf07976a49ca" },
+    { name: "Relax/frequence 1", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Frelaxation-music-30-50749.mp3?alt=media&token=98cceb9a-ab96-4838-9ccc-05138d2bea88" },
+    { name: "Relax/frequence 2", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Frelaxation-music-49-50061.mp3?alt=media&token=7d9760ec-b960-42fa-b8c7-3a7a32874728" },
+    { name: "Cosmique", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Frelaxation1.jpg?alt=media&token=7edb086d-3224-49ae-a8d3-92895bd2a859", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fcosmic-glow-6703.mp3?alt=media&token=f154c1f5-28f0-45ca-bba7-7e8d8cb89dca" },
+    { name: "Paysage", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Flandscape.png?alt=media&token=84ad4c19-3667-48d7-abaa-bc1a64a53aaf", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fzen-landscapes-345448.mp3?alt=media&token=4a6cc004-95d2-403f-a957-89764bb3d82b" },
+    { name: "Detente", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fd%C3%A9tente.png?alt=media&token=128d604f-e433-44e9-83b0-b0ac2f74bbb2", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Funwind-278905.mp3?alt=media&token=30d64e68-65e0-4e34-b18a-36559810d78d" },
+    { name: "Transcendantale", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fsilhouette.jpg?alt=media&token=adeed2d3-698d-4628-bf8d-4278eb19183a", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fdans-la-mditation-transcendantale-669.mp3?alt=media&token=67964c67-004f-482f-b5a5-e5fdac0b0426" },
+    { name: "Luth", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fluth.png?alt=media&token=d6f857d1-36e7-4747-846a-1dfb455964df", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fnaat-sharif-sitartune-255397.mp3?alt=media&token=c71c81ef-be07-4df6-8758-8e87ab0ee5d2" },
+    { name: "Guitare/basse", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fguitare.png?alt=media&token=e0b9f3cd-1e6c-4b09-a7d6-ba0e59664f40", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fguitare-musique-du-monde-royal-343439.mp3?alt=media&token=5f3dc110-166a-4761-ac00-c7ebce306a5e" },
+   { name: "Berceuse ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpiano.jpg?alt=media&token=75e51cd8-27cd-4bfd-adde-b9ebfe59a671", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Frelaxing-piano-1-118623.mp3?alt=media&token=51af6c36-dbe3-43d1-b4b9-74fce5f77e1e" },
+   { name: "Focus", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ffocus.png?alt=media&token=f950b781-cca0-4f5b-85c2-5b8d612378ad", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fstudy-music-for-focus-and-brain-power-432-hz-172844.mp3?alt=media&token=b3d4de00-12ff-4fcc-9990-ce01a8a95899" }
+  ];
+
+const additionSounds = [
+    { name: "Campagne", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcampagne.png?alt=media&token=52ac1809-2c19-4dd4-a48f-cf1234493567", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FCampagne.mp3?alt=media&token=50ecb936-6feb-4221-bfdc-cfc090fad1cc" },
+    { name: "Mer & Mouettes", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fmer%20et%20mouettes.png?alt=media&token=0e0a4df1-7484-4e4f-b223-860a69cf3009", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBSea_Mer-vagues.mp3?alt=media&token=2b012f09-a43b-4cb5-beed-9ffd71c52599" },
+    { name: "Oiseaux", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fbird.png?alt=media&token=758dd188-66ca-4db7-b5ce-e29db0dc8ee2", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBBird_Oiseaux.mp3?alt=media&token=1958ebb6-4924-4880-bbca-e290ff0bac5b" },
+    { name: "Cigales", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcigales.png?alt=media&token=02087875-6f02-49a5-a17b-e62d77300ced", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FANMLInsc_Cigales.mp3?alt=media&token=cd178f79-b415-4cd6-9e71-983e5f884c59" },
+    { name: "Grenouille", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fgrenouille.png?alt=media&token=5acd5094-3a6b-4b68-a73a-7d58c2a1670e", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Ffrogs-and-insects-241048.mp3?alt=media&token=7f3a1189-14a9-48f9-a9f1-2b5c9c9b236e" },
+    { name: "Forêt", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fforet.png?alt=media&token=45a8f70b-7641-4c1f-8c3b-8a71b1d4fdc8", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBForst_Foret.mp3?alt=media&token=744eaeb0-8be0-4712-ae49-87657b59c98b" },
+    { name: "Ruisseau", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fruisseau.jpg?alt=media&token=096ea5db-73f0-428f-b3bb-e1a55719aae4", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBForst_ruisseau.mp3?alt=media&token=02a1813f-e35c-4f23-9f2b-06427423017d" },
+    { name: "Mer & vagues", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvague.jpg?alt=media&token=aa9c398f-2efa-4df6-8621-53e52782cc06", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FWATRWave_Mer_vagues.mp3?alt=media&token=a275a965-13a0-4f20-a662-670c00b48d17" },
+    { name: "Pluie d'été", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpluiedete.jpg?alt=media&token=bf7efada-8a36-494f-aa76-0f4919c9ed01", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FRAINConc_Pluie-dete.mp3?alt=media&token=3dca05db-1a80-47e4-a36d-d0a7d0ec8747" },
+    { name: "Pluie & orage", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpluieorange.jpg?alt=media&token=71c7b4b8-1bec-465e-a775-735aa354aa67", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FSTORM_Pluie-orage.mp3?alt=media&token=08f7b379-4627-4695-93f6-395f8fbce3f1" },
+    { name: "Tonnerre", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ftonerre.jpg?alt=media&token=84657a8a-ec2a-4736-8133-a8de5ae3722d", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FTHUN_Tonnerre.mp3?alt=media&token=ba3c543f-7aa6-427e-8172-7e92d05bfd6b" },
+    { name: "Vent", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvent.jpg?alt=media&token=b86b87c6-8bd3-4781-92f7-f2a3f2be80de", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FWINDDsgn_Vent.mp3?alt=media&token=ddc48d59-7c9d-4c6d-a613-9fef2452be71" },
+    { name: "Grotte", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fgrotte.png?alt=media&token=a700ee46-a65a-4f40-83e3-0315989aa0cb", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FAMBUndr_Grotte.mp3?alt=media&token=657b19cd-0bae-447a-97b5-5a549075a9bc" },
+    { name: "Feu", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ffeu.png?alt=media&token=d73a5993-d22c-4ce7-8713-0c9a1eeab1b0", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fcamp-fire-1-228497.mp3?alt=media&token=934f160a-7197-47e2-841b-8ed33014d8b1" },
+    { name: "Feu-d'artifice", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ffireworks.png?alt=media&token=4a87373e-c6d7-44b4-8028-e0690d4e4a8d", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fefx_fogos_fireworks-72223.mp3?alt=media&token=7ff04c55-aa75-41aa-bc8d-931c14b1cdb3" },
+    { name: "Village", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvillage.jpg?alt=media&token=1c7868be-17f8-4e03-b9ae-b9c426ebf5a9", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fvillage.mp3?alt=media&token=ca983c54-e357-4cf9-a827-46987e351094" },
+    { name: "Usine", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fusine.jpg?alt=media&token=107ab5f1-1dda-47a9-8272-acd5023a76e1", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fconstruction-work-asmr-124715.mp3?alt=media&token=d1622650-06d7-4430-b94b-6915ae8586da" },
+    { name: "Sous-marin", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fsous.jpg?alt=media&token=dba2fe8f-db09-4bdc-acb1-ba60526af630", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fsous-marin.mp3?alt=media&token=07fcd174-bee0-420e-b34a-4489766c3605" },
+    
+
+
+    { name: "174 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F174-hz-pain-release-156261.mp3?alt=media&token=17b36e01-d6aa-49ed-b282-02a29cf1a9ea"},
+    { name: "285 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F285-hz-tissue-and-organ-healing-156262.mp3?alt=media&token=2b226de0-5374-427b-8c2d-65413841ec29"},
+    { name: "396 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F396-hz-root-chakra-156263.mp3?alt=media&token=be603daa-fbbf-4402-98dd-cddb45cd8b49"},
+    { name: "417 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F417-hz-sacral-chakra-156264.mp3?alt=media&token=cf10dc8f-9248-4984-84b8-e3e81052b08e"},
+    { name: "432 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F432-hz-tune-in-with-nature-156265.mp3?alt=media&token=5b478797-b0b7-4d77-b762-1c8f428e8014" },
+    { name: "528 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F528-hz-solar-plexus-156266.mp3?alt=media&token=26e46896-f7ba-43b1-a062-d7bacf379c24" },
+    { name: "639 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F639-hz-heart-chakra-156267.mp3?alt=media&token=aa445ece-a5c8-4520-a486-d8e23541c679" },
+    { name: "741 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F741hz-throat-chakra-balancing-fostering-honest-expressions-157686.mp3?alt=media&token=a9fe4ea5-6f50-4610-9357-9de52c9c984f" },
+    { name: "852 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F852hz-third-eye-awakening-unleashing-intuition-clairvoyance-157687.mp3?alt=media&token=5d8bbf26-0e0e-49ec-80ec-61b8c3975668" },
+    { name: "963 Hz", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2F963hz-crown-chakra-healing-vibrational-harmonics-for-awakening-157688.mp3?alt=media&token=97409038-5481-46d9-b099-a6d685a48479" },
+
+
+
+    { name: "Ronronnements", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fchat.png?alt=media&token=44618bb1-a70f-443f-be94-ffe733eba1dc", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fpurring-cat_01-63402.mp3?alt=media&token=50c0d562-c7f1-4269-a5cd-d297e9c33980" },
+    { name: "Pulsations", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpuls.jpg?alt=media&token=1e8280f5-e4c0-4994-8c68-dc392ce40fb9", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fheartbeat-241465.mp3?alt=media&token=084bc74b-a868-4ed2-b5af-5b4cdfa86c64" },
+    { name: "Pas dans la neige", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fneige.png?alt=media&token=598253aa-5c80-4b93-bded-c2311b8149ee", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FFOLYFeet_Pas%20dans%20la%20neige%203%20(ID%203363)_LS.mp3?alt=media&token=e1d8ea6f-f6e1-40ab-8929-deac1b613701" },
+    { name: "Pages", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpage.jpg?alt=media&token=be52af69-954c-4849-bdf3-e041aae075c3", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fflipping-pages-236732.mp3?alt=media&token=e890fe96-c2d9-4b5e-a37d-6b0ff805763c" },
+    { name: "Ecriture ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fecritue.png?alt=media&token=fdce5c46-3a16-43da-a47c-fd55b4c16621", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fpencil-write-desk-paper-loop-3-215731.mp3?alt=media&token=9cf565ae-dcab-4417-b431-fb112eb339cc" },
+    { name: "Coloriage ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcoloriage.png?alt=media&token=e69bc2f0-0183-4ee8-ba0f-32ca200c4a95", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fpencil-crayon-foley-coloring-1-200907.mp3?alt=media&token=f2a243c8-033b-44a4-98a3-f857c356310d" },
+    { name: "Ciseaux ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fciseaux.png?alt=media&token=dc998385-fe44-420f-a026-67a2e10fd2a0", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fscissors-43438.mp3?alt=media&token=73b062a7-522f-4f65-a0eb-697010b3bf6d" },
+    { name: "Papier froissé ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpapier.jpg?alt=media&token=cc2411ff-0ce4-4cd2-9967-1f80f4c45e4a", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fplastic-bag-crinkle-55362.mp3?alt=media&token=ba79cc92-7f9c-4b45-a101-277b90ae14c9" },
+    { name: "Clavier ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fclavier.png?alt=media&token=a72aa999-7d41-4f60-9be6-3421fdda7dfd", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fkeyboard-sound-satisfying-304411.mp3?alt=media&token=f0bb208a-eda8-4fb7-814f-0076a098a8d5" },
+    { name: "Ventilateur ", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fventilateur.jpg?alt=media&token=90f21208-97d7-47ef-8c78-c7f24c074b95", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fcomputer-humming-236384.mp3?alt=media&token=fc376581-e0fc-4757-bc0c-2e608ab33107" },
+    { name: "Séche cheveux", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fcheveux.png?alt=media&token=b56a2f16-8492-4a0f-9534-b8c67ca46281", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fhairdryer_low-108357.mp3?alt=media&token=2ea5f1e0-3ac5-4156-a6ed-71fb9a95971a" },
+    { name: "Craquement vinyle", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fvinyl.jpg?alt=media&token=43469774-98ab-4729-9609-1601bf741f1c", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fold-vinyl-record-crackle-194006.mp3?alt=media&token=3f08bc9a-3ee3-4922-85ef-927ed25c4da6" },
+    { name: "Turbine", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fturbine.jpg?alt=media&token=950ca6e7-0e5c-4ac7-8c67-07e52ba4d3ae", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fturbine-oscillations-18250.mp3?alt=media&token=fd8954f0-f3e4-4297-8b5a-97d63512145b" },
+    { name: "Moteur", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fmoteur.png?alt=media&token=db60d4cc-5ef4-4f81-8aaf-0c7df5b524ab", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fbus_growl.mp3?alt=media&token=fa55e0c2-6eda-47a0-9085-eaf49faa4319" },
+    { name: "Hélicoptère", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fhelicop.png?alt=media&token=cc7a8dd9-ce82-4636-95d7-81e772edd2da", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fhelicopter-sound-effect-241421.mp3?alt=media&token=6e1bde5d-71f0-4029-89f8-a0456860a2c0" },
+ 
+
+ 
+    { name: "DO", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-do.mp3?alt=media&token=817c6c05-f624-4d4d-9559-8caedb900598" },
+    { name: "RE", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-re.mp3?alt=media&token=05118237-c19d-466e-a6aa-3b89662fb50e" },
+    { name: "MI", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-mi.mp3?alt=media&token=f6b173ae-0fc0-4c78-80d6-1bbe2433ca8f" },
+    { name: "FA", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-fa.mp3?alt=media&token=6cf7310b-9b23-4ce0-a408-0f80f6cf45ed" },
+    { name: "SOL", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-sol.mp3?alt=media&token=f171350e-c95c-4737-a38e-ae6a1d68ef52" },
+    { name: "LA", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fdiphonique.png?alt=media&token=9c787fa7-5185-4e31-8d76-0b88fc5da702", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2FVOXSing_Chant-diphonique-la.mp3?alt=media&token=3eafb740-5752-42f2-a449-2dcd1ff6f248" },
+   
+
+
+    { name: "Calme/morphé", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fplume.jpg?alt=media&token=035b54ae-1cae-4319-acbb-77d5302f16ae", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Ffree-royalty-zen-calm-deep-meditation-and-sleep-music-191592.mp3?alt=media&token=07ac6e0b-ad98-41e9-9f14-ec157d785237" },
+    { name: "Zen Oasis", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Foasis.jpg?alt=media&token=be6cccb0-3a75-4289-b029-241d1cfabb8c", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fzen-oasis-165858.mp3?alt=media&token=d9e8ec61-b83e-480c-b40d-cf07976a49ca" },
+    { name: "Relax/frequence 1", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Frelaxation-music-30-50749.mp3?alt=media&token=98cceb9a-ab96-4838-9ccc-05138d2bea88" },
+    { name: "Relax/frequence 2", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fondes.jpg?alt=media&token=67cf0646-8105-4e2d-8112-048e2825f87f", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Frelaxation-music-49-50061.mp3?alt=media&token=7d9760ec-b960-42fa-b8c7-3a7a32874728" },
+    { name: "Cosmique", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Frelaxation1.jpg?alt=media&token=7edb086d-3224-49ae-a8d3-92895bd2a859", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fcosmic-glow-6703.mp3?alt=media&token=f154c1f5-28f0-45ca-bba7-7e8d8cb89dca" },
+     { name: "Paysage", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Flandscape.png?alt=media&token=84ad4c19-3667-48d7-abaa-bc1a64a53aaf", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fzen-landscapes-345448.mp3?alt=media&token=4a6cc004-95d2-403f-a957-89764bb3d82b" },
+     { name: "Detente", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fd%C3%A9tente.png?alt=media&token=128d604f-e433-44e9-83b0-b0ac2f74bbb2", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Funwind-278905.mp3?alt=media&token=30d64e68-65e0-4e34-b18a-36559810d78d" },
+    { name: "Transcendantale", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fsilhouette.jpg?alt=media&token=adeed2d3-698d-4628-bf8d-4278eb19183a", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fdans-la-mditation-transcendantale-669.mp3?alt=media&token=67964c67-004f-482f-b5a5-e5fdac0b0426" },
+    { name: "Luth", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fluth.png?alt=media&token=d6f857d1-36e7-4747-846a-1dfb455964df", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fnaat-sharif-sitartune-255397.mp3?alt=media&token=c71c81ef-be07-4df6-8758-8e87ab0ee5d2" },
+    { name: "Guitare/basse", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fguitare.png?alt=media&token=e0b9f3cd-1e6c-4b09-a7d6-ba0e59664f40", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fguitare-musique-du-monde-royal-343439.mp3?alt=media&token=5f3dc110-166a-4761-ac00-c7ebce306a5e" },
+   { name: "Berceuse", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Fpiano.jpg?alt=media&token=75e51cd8-27cd-4bfd-adde-b9ebfe59a671", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Frelaxing-piano-1-118623.mp3?alt=media&token=51af6c36-dbe3-43d1-b4b9-74fce5f77e1e" },
+   { name: "Focus", image: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/images%2Ffocus.png?alt=media&token=f950b781-cca0-4f5b-85c2-5b8d612378ad", file: "https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/sounds%2Fstudy-music-for-focus-and-brain-power-432-hz-172844.mp3?alt=media&token=b3d4de00-12ff-4fcc-9990-ce01a8a95899" }
+  ];
+
+  
+  let selectedAdditionSounds = [];
+  let playingSounds = {}; // { file: Audio }
+function stopAllSounds() {
+    for (let file in playingSounds) {
+      playingSounds[file].pause();
+      playingSounds[file].currentTime = 0;
+    }
+    playingSounds = {};
+  }
+const ambianceDiv = document.getElementById("ambiance");
+  const frequenceDiv = document.getElementById("frequence");
+  const asmrDiv = document.getElementById("asmr");
+  const diphoniqueDiv = document.getElementById("diphonique");
+  const musiqueDiv = document.getElementById("musique");
+  const additionDiv = document.getElementById("addition");
+  
+  const audioPlayer = document.getElementById("audioPlayer");
+  const gong = document.getElementById("gong");
+
+
+
+  function createSoundGrid(list, container) {
+    container.innerHTML = "";
+    list.forEach((sound) => {
+      const div = document.createElement("div");
+      div.className = "sound-option";
+      div.innerHTML = `
+        <div class="title-bar">${sound.name}</div>
+        <img src="${sound.image}" alt="${sound.name}">
+      `;
+
+
+      div.addEventListener("click", async () => {
+        mettreMediaEnCacheHorsLigne(sound.image);
+        mettreMediaEnCacheHorsLigne(sound.file);
+
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+          currentAudio.removeAttribute("src");
+          currentAudio.load();
+          currentAudio = null;
+        }
+
+        document.querySelectorAll(".sound-option").forEach(el => el.classList.remove("active"));
+        document.querySelectorAll(".validate-btn").forEach(btn => btn.remove());
+
+        div.classList.add("active");
+        selectedSound = sound.file;
+
+        const urlLecture = await obtenirUrlLectureAudio(sound.file);
+        if (!urlLecture) {
+          return;
+        }
+
+        currentAudio = new Audio(urlLecture);
+        currentAudio.loop = !sound.file.includes("gong");
+        currentAudio.play().catch(error => {
+          console.error("Erreur de lecture audio :", error);
+        });
+
+        const validateBtn = document.createElement("button");
+        validateBtn.className = "validate-btn";
+        validateBtn.innerText = "Valider";
+        validateBtn.onclick = () => startSession();
+        div.appendChild(validateBtn);
+      });
+
+      container.appendChild(div);
+    });
+  }
+function gererAffichageBoutonFrequences(typeSon) {
+    const boutonFrequences = document.getElementById("btn-frequences");
+
+    if (typeSon === "ambiant") {
+        // On masque le bouton pour les sons ambiants
+        boutonFrequences.style.display = "none";
+    } else if (typeSon === "asmr") {
+        // On l'affiche pour les sons de type fréquence
+        boutonFrequences.style.display = "none";
+    }else if (typeSon === "diphonique") {
+        // On l'affiche pour les sons de type fréquence
+        boutonFrequences.style.display = "none";
+    }else if (typeSon === "musique") {
+        // On l'affiche pour les sons de type fréquence
+        boutonFrequences.style.display = "none";
+    }else if (typeSon === "frequence") {
+        // On l'affiche pour les sons de type fréquence
+        boutonFrequences.style.display = "block";
+    }
+
+}
+
+  function showSounds(type) {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio = null;
+    }
+
+    document.querySelectorAll(".btn-group button").forEach(btn => btn.classList.remove("active"));
+
+  // Ajouter la classe 'active' au bouton cliqué
+  if (type === "ambiance") {
+    document.querySelector(".btn-group button:nth-child(1)").classList.add("active");
+  } else if (type === "frequence") {
+    document.querySelector(".btn-group button:nth-child(2)").classList.add("active");
+  }
+  
+  else if (type === "asmr") {
+    document.querySelector(".btn-group button:nth-child(3)").classList.add("active");
+  }else if (type === "diphonique") {
+    document.querySelector(".btn-group button:nth-child(4)").classList.add("active");
+  }else if (type === "musique") {
+    document.querySelector(".btn-group button:nth-child(5)").classList.add("active");
+  }else if (type === "addition") {
+  document.querySelector(".btn-group button:nth-child(6)").classList.add("active");
+}
+
+
+  // Gérer l'affichage des sons
+  ambianceDiv.style.display = "none";
+  frequenceDiv.style.display = "none";
+  asmrDiv.style.display = "none";
+  diphoniqueDiv.style.display = "none";
+  musiqueDiv.style.display = "none";
+  document.getElementById("session").style.display = "none";
+    document.getElementById("addition").style.display = "none";
+    document.getElementById("validateAddition").style.display = "none";
+    ambianceDiv.style.display = "none";
+    frequenceDiv.style.display = "none";
+    asmrDiv.style.display = "none";
+    diphoniqueDiv.style.display = "none";
+    musiqueDiv.style.display = "none";
+    document.getElementById("session").style.display = "none";
+  document.getElementById("addition").style.display = "none";
+    document.getElementById("validateAddition").style.display = "none";
+
+ stopAllSounds();
+
+const btnInfoFreq = document.getElementById("btnInfoFrequence");
+const additionText = document.getElementById("additionText"); // Le texte explicatif que tu ajoutes dans ton HTML
+
+if (type === "addition") {
+  createAdditionGrid();
+  document.getElementById("addition").style.display = "grid";
+  document.getElementById("validateAddition").style.display = "block";
+  document.getElementById("additionText").style.display = "block";
+ 
+
+
+  // Affiche le texte explicatif uniquement ici
+  if (additionText) additionText.style.display = "block";
+
+  // Cache le bouton info fréquences
+  if (btnInfoFreq) btnInfoFreq.style.display = "none";
+
+} else {
+  // Afficher la catégorie sélectionnée
+  document.getElementById(type).style.display = "grid";
+
+  // Cache le texte explicatif pour toutes les autres catégories
+  if (additionText) additionText.style.display = "none";
+}
+
+if (type === "ambiance") {
+  createSoundGrid(ambianceSounds, ambianceDiv);
+  ambianceDiv.style.display = "grid";
+
+  if (btnInfoFreq) btnInfoFreq.style.display = "none";
+
+} else if (type === "asmr") {
+  createSoundGrid(asmrSounds, asmrDiv);
+  asmrDiv.style.display = "grid";
+
+  if (btnInfoFreq) btnInfoFreq.style.display = "none";
+
+} else if (type === "diphonique") {
+  createSoundGrid(diphoniqueSounds, diphoniqueDiv);
+  diphoniqueDiv.style.display = "grid";
+
+  if (btnInfoFreq) btnInfoFreq.style.display = "none";
+
+} else if (type === "musique") {
+  createSoundGrid(musiqueSounds, musiqueDiv);
+  musiqueDiv.style.display = "grid";
+
+  if (btnInfoFreq) btnInfoFreq.style.display = "none";
+
+} else if (type === "frequence") {
+  createSoundGrid(frequenceSounds, frequenceDiv);
+  frequenceDiv.style.display = "grid";
+
+  // Affiche le bouton info fréquences uniquement ici
+  if (btnInfoFreq) btnInfoFreq.style.display = "block";
+}
+  }
+
+
+
+document.getElementById("btnInfoFrequence").addEventListener("click", () => {
+  const info = document.getElementById("infoFrequence");
+  if (info.style.display === "none" || info.style.display === "") {
+    info.style.display = "block";
+  } else {
+    info.style.display = "none";
+  }
+});
+
+ function createAdditionGrid() {
+  const container = document.getElementById("addition");
+  container.innerHTML = "";
+  selectedAdditionSounds = [];
+
+  additionSounds.forEach((sound) => {
+    const div = document.createElement("div");
+    div.className = "sound-option";
+
+    const titleBar = document.createElement("div");
+    titleBar.className = "title-bar";
+    titleBar.textContent = sound.name;
+
+    const img = document.createElement("img");
+    img.src = sound.image;
+    img.alt = sound.name;
+
+    const plusBtn = document.createElement("button");
+    plusBtn.className = "plus-button";
+    plusBtn.innerText = "+";
+
+    // Création de l'objet audio associé
+    const audio = new Audio(sound.file);
+    audio.loop = true;
+    audio.volume = 1;
+    sound.audioElement = audio; // On garde une référence dans l'objet
+
+    // Slider de volume (initialement caché)
+    const volumeSlider = document.createElement("input");
+    volumeSlider.type = "range";
+    volumeSlider.min = "0";
+    volumeSlider.max = "1";
+    volumeSlider.step = "0.01";
+    volumeSlider.value = "1";
+    volumeSlider.className = "volume-slider";
+    volumeSlider.style.display = "none"; // Masqué par défaut
+
+    volumeSlider.addEventListener("input", (e) => {
+      audio.volume = parseFloat(e.target.value);
+    });
+
+    plusBtn.onclick = async (e) => {
+      e.stopPropagation();
+
+      mettreMediaEnCacheHorsLigne(sound.image);
+      mettreMediaEnCacheHorsLigne(sound.file);
+
+      plusBtn.classList.toggle("selected");
+
+      if (plusBtn.classList.contains("selected")) {
+        selectedAdditionSounds.push(sound.file);
+        if (!playingSounds[sound.file]) {
+          const urlLecture = await obtenirUrlLectureAudio(sound.file);
+          if (!urlLecture) {
+            return;
+          }
+
+          const audioHorsLigne = new Audio(urlLecture);
+          audioHorsLigne.loop = true;
+          audioHorsLigne.volume = parseFloat(volumeSlider.value);
+
+          audioHorsLigne.play().catch(error => {
+            console.error("Erreur de lecture audio :", error);
+          });
+
+          playingSounds[sound.file] = audioHorsLigne;
+        } else {
+          playingSounds[sound.file].play();
+        }
+        volumeSlider.style.display = "block"; // Affiche le slider
+      } else {
+        selectedAdditionSounds = selectedAdditionSounds.filter(f => f !== sound.file);
+        if (playingSounds[sound.file]) {
+          playingSounds[sound.file].pause();
+          playingSounds[sound.file].currentTime = 0;
+          delete playingSounds[sound.file];
+        }
+        volumeSlider.style.display = "none"; // Cache le slider
+      }
+    };
+
+    img.onclick = async () => {
+      mettreMediaEnCacheHorsLigne(sound.image);
+      mettreMediaEnCacheHorsLigne(sound.file);
+
+      const isSelected = plusBtn.classList.contains("selected");
+      if (isSelected) return;
+
+      if (playingSounds[sound.file]) {
+        playingSounds[sound.file].pause();
+        playingSounds[sound.file].currentTime = 0;
+        delete playingSounds[sound.file];
+      } else {
+        const urlLecture = await obtenirUrlLectureAudio(sound.file);
+        if (!urlLecture) {
+          return;
+        }
+
+        const audioHorsLigne = new Audio(urlLecture);
+        audioHorsLigne.loop = true;
+
+        audioHorsLigne.play().catch(error => {
+          console.error("Erreur de lecture audio :", error);
+        });
+
+        playingSounds[sound.file] = audioHorsLigne;
+
+        audioHorsLigne.onended = () => {
+          delete playingSounds[sound.file];
+        };
+      }
+    };
+
+    // Ajout des éléments dans le conteneur
+    div.appendChild(titleBar);
+    div.appendChild(img);
+    div.appendChild(volumeSlider); // Sous l'image
+    div.appendChild(plusBtn);
+    container.appendChild(div);
+  });
+}
+
+function fadeOutAudio(audio) {
+  const fadeInterval = setInterval(() => {
+    if (audio.volume > 0.05) {
+      audio.volume -= 0.05;
+    } else {
+      audio.volume = 0;
+      audio.pause();
+      audio.currentTime = 0;
+      clearInterval(fadeInterval);
+    }
+  }, 200);
+}
+
+  async function validateAddition() {
+    if (selectedAdditionSounds.length === 0) {
+      alert("Veuillez sélectionner au moins un son.");
+      return;
+    }
+
+    // Arrêter tous les sons non sélectionnés
+    for (let file in playingSounds) {
+      if (!selectedAdditionSounds.includes(file)) {
+        playingSounds[file].pause();
+        playingSounds[file].currentTime = 0;
+        delete playingSounds[file];
+      }
+    }
+
+    // Lancer tous les sons sélectionnés
+    for (const file of selectedAdditionSounds) {
+      mettreMediaEnCacheHorsLigne(file);
+
+      if (!playingSounds[file]) {
+        const urlLecture = await obtenirUrlLectureAudio(file);
+        if (!urlLecture) {
+          continue;
+        }
+
+        const audio = new Audio(urlLecture);
+        audio.loop = true;
+        audio.play().catch(error => {
+          console.error("Erreur de lecture audio :", error);
+        });
+        playingSounds[file] = audio;
+      }
+    }
+
+    startSession(); // Lance le timer
+  }
+
+
+
+  function startSession() {
+    
+    // Empêche les doublons (ex : double-clic / plusieurs timers actifs)
+    if (typeof timerInterval !== "undefined" && timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    document.getElementById("session").style.display = "flex";
+    ambianceDiv.style.display = "none";
+    frequenceDiv.style.display = "none";
+    asmrDiv.style.display = "none";
+    diphoniqueDiv.style.display = "none";
+    musiqueDiv.style.display = "none";
+    document.getElementById("endMessage")?.remove(); // supprimer ancien message éventuel
+    document.getElementById("addition").style.display = "none";
+  document.getElementById("validateAddition").style.display = "none";
+
+
+
+  
+    let duree = parseInt(localStorage.getItem("sessionDuree"));
+    if (!duree || isNaN(duree)) duree = 5;
+    let totalSeconds = duree * 60;
+
+    updateTimer(totalSeconds);
+    document.getElementById("timer").style.display = "block";
+
+ 
+
+
+   
+
+
+    const currentInterval = setInterval(() => {
+      totalSeconds--;
+      updateTimer(totalSeconds);
+      if (totalSeconds <= 0) {
+  // Si une fin de session a déjà été traitée, ne rien ré-afficher
+  if (document.getElementById("endMessage")) {
+    clearInterval(currentInterval);
+    timerInterval = null;
+    return;
+  }
+
+  clearInterval(currentInterval);
+  timerInterval = null;
+
+  // Arrêter le son principal avec fondu
+  if (currentAudio) {
+    fadeOutAudio(currentAudio);
+  }
+
+  // Arrêter tous les autres sons additionnels en boucle
+  for (let file in playingSounds) {
+    fadeOutAudio(playingSounds[file]);
+  }
+  playingSounds = {};
+
+  // Jouer le gong (une fois)
+  gong.loop = false;
+  gong.play();
+
+  document.getElementById("meditationCircle").style.animation = "none";
+
+  // Masquer le timer et afficher le message de fin
+  document.getElementById("timer").style.display = "none";
+
+  const message = document.createElement("div");
+  message.id = "endMessage";
+  message.textContent = "🙏 La session de relaxation est terminée. Prenez un instant pour revenir doucement.";
+  message.style.fontSize = "20px";
+  message.style.textAlign = "center";
+  message.style.marginTop = "30px";
+  message.style.color = "#ffffff";
+
+  document.getElementById("session").appendChild(message);
+}
+
+    }, 1000);
+    timerInterval = currentInterval;
+  }
+
+  function updateTimer(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    const timer = document.getElementById("timer");
+    timer.style.display = "block";
+    timer.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  }
+
+   
+ 
+
+
+
+
+
+  
+</script>
+
+
+
+
+
+<footer>
+    <p>&copy; 2025 ZenBreak-app | code.nature81 | Tous droits réservés <a href="privacy-policy.html"  style="text-decoration:none;color:#777;">|Politique de confidentialité |</a></p>
+  </footer>
+
+    <script>
+  const backgroundVideo = document.getElementById("background-video");
+
+  backgroundVideo.addEventListener("canplay", () => {
+    backgroundVideo.classList.add("video-ready");
+  });
+</script>
+
+  
+
+  <script type="module" src="js/firebase-init.js"></script>
+</body>
+
+</html>
+

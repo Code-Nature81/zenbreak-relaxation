@@ -1,0 +1,10 @@
+ZenBreak - Application de relaxation
+Tous droits réservés © 2025 Code-Nature81
+
+Ce logiciel, incluant son code source, ses éléments graphiques, ses sons et tout autre contenu associé, est la propriété exclusive de Code-Nature81.
+
+Toute reproduction, distribution, modification, diffusion ou utilisation, totale ou partielle, sans autorisation écrite préalable de l’auteur est strictement interdite.
+
+Le non-respect de cette interdiction constitue une contrefaçon pouvant engager la responsabilité civile et pénale de son auteur conformément aux articles L.335-2 et suivants du Code de la propriété intellectuelle.
+
+Contact : code.nature81@gmail.com

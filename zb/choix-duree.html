@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZenBreak - Choix de la durée</title>
+<link rel="preload" as="image" href="fondecran.png">
+<style>
+   body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  background-color: #06152f;
+  background-image: url("fondecran.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  color: #0277bd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+#background-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#background-video.video-ready {
+  opacity: 1;
+}
+h1{
+  color: white;
+  text-align: center;
+}
+  label {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+  select {
+    font-size: 1.2rem;
+    padding: 12px 15px;
+    border-radius: 15px;
+    border: none;
+    width: 220px;
+    max-width: 90vw;
+    background: linear-gradient(to right, #0288d1, #26c6da);
+    color: #000000;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  select:hover, select:focus {
+    background: linear-gradient(to right, #0288d1, #26c6da);
+    outline: none;
+  }
+  button {
+    margin-top: 35px;
+    background: linear-gradient(to right, #0288d1, #26c6da);
+    border: none;
+    padding: 14px 35px;
+    border-radius: 18px;
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 200px;
+    max-width: 90vw;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #1e6ea4;
+  }
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 2rem;
+    }
+    label {
+      font-size: 1.1rem;
+    }
+    select {
+      font-size: 1rem;
+      width: 90vw;
+    }
+    button {
+      font-size: 1.1rem;
+      width: 90vw;
+    }
+  }
+
+  footer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 0.9em;
+  color: #777;
+  font-weight: 300;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+</head>
+<body>
+<video id="background-video" autoplay loop muted playsinline preload="auto" 
+  poster="fondecran.png">
+  <source src="https://firebasestorage.googleapis.com/v0/b/zenbreak-app-fc557.firebasestorage.app/o/video%2F121805-724719819_tiny.mp4?alt=media&token=14a9cbdf-93de-43c1-ac15-b2f15b9cdd6f" type="video/mp4">
+</video>
+<h1>⏱ Choisissez la durée de votre session</h1>
+
+<label for="duree">Durée (minutes) :</label>
+<select id="duree" name="duree" aria-label="Sélectionnez la durée de la session en minutes">
+  <!-- Options 1 à 30 -->
+  <script>
+    for(let i=1; i<=60; i++) {
+      document.write(`<option value="${i}">${i} minute${i > 1 ? 's' : ''}</option>`);
+    }
+  </script>
+</select>
+
+<button id="btn-suivant">Suivant</button>
+
+<script>
+  document.getElementById('btn-suivant').addEventListener('click', () => {
+    const duree = document.getElementById('duree').value;
+    // Sauvegarder dans localStorage pour récupérer dans choix-son.html
+    localStorage.setItem('sessionDuree', duree);
+    // Redirection vers choix-son.html
+    window.location.href = 'choix-son.html';
+  });
+</script>
+
+
+<footer>
+    <p>&copy; 2025 ZenBreak-app | code.nature | Tous droits réservés <a href="privacy-policy.html"  style="text-decoration:none;color:#777;">|Politique de confidentialité |</a></p>
+  </footer>
+  
+  <script>
+  const backgroundVideo = document.getElementById("background-video");
+
+  backgroundVideo.addEventListener("canplay", () => {
+    backgroundVideo.classList.add("video-ready");
+  });
+</script>
+
+<script type="module" src="js/firebase-init.js"></script>
+
+</body>
+</html>
