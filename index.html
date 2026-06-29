@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZenBreak – Votre pause mentale</title>
-  <meta name="description" content="ZenBreak est une application française de relaxation avec sons naturels, ASMR, bruits colorés et fréquences apaisantes pour faire une pause, se détendre, se concentrer ou s'endormir." />
-  <meta name="keywords" content="ZenBreak, application relaxation, sons naturels, ASMR, sommeil, bruit de pluie, méditation, détente, stress, fréquences relaxantes" />
+  <meta name="description" content="ZenBreak est une application française de relaxation et de respiration guidée : sons naturels, ASMR, battements binauraux, fréquences apaisantes, et exercices de respiration (cohérence cardiaque, 4-7-8...) pour se détendre, se concentrer ou s'endormir." />
+  <meta name="keywords" content="ZenBreak, application relaxation, respiration guidée, cohérence cardiaque, sons naturels, ASMR, sommeil, battements binauraux, méditation, détente, stress, fréquences relaxantes" />
   <meta name="author" content="Code Nature" />
   <meta name="robots" content="index, follow" />
   <meta property="og:title" content="ZenBreak – Relaxation, sommeil et sons naturels" />
-  <meta property="og:description" content="Faites une pause avec des sons naturels, ASMR, bruits colorés et fréquences relaxantes. Une application française pensée pour ralentir, respirer et se détendre." />
+  <meta property="og:description" content="Deux univers en une appli : pauses sonores immersives (nature, ASMR, binauraux) et respiration guidée (cohérence cardiaque, 4-7-8...). Une application française pour ralentir, respirer et se détendre." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="images/zenbreak-preview.jpg" />
   <meta property="og:url" content="https://www.zenbreak-app.fr/" />
@@ -213,8 +213,8 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 60px;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 48px;
       align-items: center;
     }
 
@@ -331,6 +331,49 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(20px);
       z-index: 2;
+    }
+
+    /* DUO DE TÉLÉPHONES (son + respiration) */
+    .phones-duo {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .phone.mini {
+      width: min(232px, 70vw);
+      border-width: 8px;
+      border-radius: 34px;
+      padding: 10px;
+    }
+
+    .phone.mini .screen {
+      min-height: 470px;
+      border-radius: 26px;
+      padding: 18px 14px;
+    }
+
+    .phone.mini .meditation-circle {
+      width: 124px;
+      height: 124px;
+      margin: 8px auto 18px;
+    }
+
+    .phone.mini .meditation-circle strong { font-size: 1.25rem; }
+    .phone.mini .screen h2 { font-size: 1.15rem; }
+    .phone.mini .screen p { font-size: 0.78rem; margin-bottom: 14px; }
+    .phone.mini .sound { padding: 8px; gap: 8px; }
+    .phone.mini .sound-icon { width: 30px; height: 30px; font-size: 0.9rem; }
+    .phone.mini .sound strong { font-size: 0.78rem; }
+    .phone.mini .sound span { font-size: 0.64rem; }
+
+    .breath-circle {
+      background: radial-gradient(circle, rgba(95,255,223,0.22), rgba(77,159,255,0.08) 54%, transparent 72%) !important;
+      border-color: rgba(95,255,223,0.35) !important;
     }
 
     .screen {
@@ -473,6 +516,86 @@
     .card h3 { font-family: 'Sora', sans-serif; font-size: 1.18rem; margin-bottom: 10px; letter-spacing: -0.02em; }
     .card p { color: var(--muted); font-size: 0.95rem; }
 
+    /* TWO MODES */
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .mode-card {
+      border-radius: var(--radius);
+      padding: 34px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mode-card:hover { transform: translateY(-5px); }
+
+    .mode-sound {
+      background:
+        radial-gradient(circle at 20% 0%, rgba(77,159,255,0.20), transparent 55%),
+        linear-gradient(135deg, rgba(77,159,255,0.14), rgba(95,255,223,0.08));
+    }
+
+    .mode-breath {
+      background:
+        radial-gradient(circle at 80% 0%, rgba(95,255,223,0.20), transparent 55%),
+        linear-gradient(135deg, rgba(95,255,223,0.12), rgba(139,122,255,0.14));
+    }
+
+    .mode-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .mode-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 1.9rem;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      flex-shrink: 0;
+    }
+
+    .mode-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .mode-card > p { color: var(--muted); font-size: 1rem; margin-bottom: 20px; }
+
+    .mode-list { list-style: none; display: grid; gap: 12px; }
+
+    .mode-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .mode-list li span {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(95,255,223,0.14);
+      color: var(--cyan);
+      font-weight: 900;
+      font-size: 0.78rem;
+    }
+
     /* FEATURE GRID */
     .feature-grid {
       display: grid;
@@ -551,6 +674,7 @@
     }
 
     .sound-chip span { font-size: 1.3rem; }
+
 
     /* STEPS */
     .steps {
@@ -674,6 +798,7 @@
     /* RESPONSIVE */
     @media (max-width: 960px) {
       .hero-grid, .feature-grid { grid-template-columns: 1fr; }
+      .modes-grid { grid-template-columns: 1fr; }
       .hero { padding-top: 48px; }
       .phone-wrap { margin-top: 20px; }
       .cards, .steps { grid-template-columns: 1fr; }
@@ -716,7 +841,7 @@
     "name": "ZenBreak",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Android, iOS",
-    "description": "Application française de relaxation avec sons naturels, ASMR et fréquences relaxantes.",
+    "description": "Application française de relaxation et de respiration guidée : sons naturels, ASMR, battements binauraux, fréquences et exercices de respiration (cohérence cardiaque, 4-7-8).",
     "author": { "@type": "Organization", "name": "Code Nature" },
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
   }
@@ -744,9 +869,9 @@
       <button class="mobile-menu" id="mobileMenu" aria-label="Ouvrir le menu">☰</button>
 
       <nav class="nav-links" id="navLinks" aria-label="Navigation principale">
-        <a href="#bienfaits">Bienfaits</a>
+        <a href="#pause-sonore">Pause sonore</a>
+        <a href="#respiration">Respiration</a>
         <a href="#sons">Sons</a>
-        <a href="#fonctionnement">Fonctionnement</a>
         <a href="#faq">FAQ</a>
         
       </nav>
@@ -760,8 +885,9 @@
           <div class="badge"><span class="pulse"></span> Application mobile de relaxation & sommeil</div>
           <h1>Faites une pause.<br><span class="gradient-text">Respirez.</span><br>Repartez léger.</h1>
           <p class="hero-desc">
-            ZenBreak vous accompagne pour vous détendre,
+            ZenBreak vous accompagne pour vous détendre, mieux respirer,
             améliorer votre concentration ou préparer votre sommeil en quelques minutes.
+            <strong style="color:var(--text);">Deux univers : des pauses sonores immersives et la respiration guidée.</strong>
           </p>
 
           <div class="store-buttons">
@@ -806,55 +932,210 @@
 
         <div class="phone-wrap" aria-label="Aperçu de l'application ZenBreak">
           <div class="orbit"></div>
-          <div class="phone">
-            <div class="screen">
-              <div class="screen-top">
-                <span class="screen-brand">
-                  <img src="logo.png" alt="Logo ZenBreak" />
-                  ZenBreak
-                </span>
-                <span>12:45</span>
+          <div class="phones-duo">
+            <!-- Téléphone 1 : Pause sonore -->
+            <div class="phone mini">
+              <div class="screen">
+                <div class="screen-top">
+                  <span class="screen-brand">
+                    <img src="logo.png" alt="Logo ZenBreak" />
+                    ZenBreak
+                  </span>
+                  <span>12:45</span>
+                </div>
+
+                <div class="meditation-circle">
+                  <strong>05:00</strong>
+                </div>
+
+                <h2>Pause sonore</h2>
+                <p>Lancez une ambiance et laissez le timer vous guider.</p>
+
+                <div class="sound-list">
+                  <div class="sound">
+                    <div class="sound-icon">🌿</div>
+                    <div><strong>Sons ambiants</strong><span>Pluie, Vent, Feu, Grotte...</span></div>
+                  </div>
+                  <div class="sound">
+                    <div class="sound-icon">🧠</div>
+                    <div><strong>Battements binauraux</strong><span>Delta, Thêta, Alpha, Bêta...</span></div>
+                  </div>
+                  <div class="sound">
+                    <div class="sound-icon">🎧</div>
+                    <div><strong>ASMR</strong><span>Ronronnement, Pages, Clavier...</span></div>
+                  </div>
+                  <div class="sound">
+                    <div class="sound-icon">🎚️</div>
+                    <div><strong>Votre mix sonore</strong><span>Assemble et gère le volume...</span></div>
+                  </div>
+                </div>
               </div>
+            </div>
 
-              <div class="meditation-circle">
-                <strong>05:00</strong>
-              </div>
+            <!-- Téléphone 2 : Respiration -->
+            <div class="phone mini">
+              <div class="screen">
+                <div class="screen-top">
+                  <span class="screen-brand">
+                    <img src="logo.png" alt="Logo ZenBreak" />
+                    ZenBreak
+                  </span>
+                  <span>12:45</span>
+                </div>
 
-              <h2>Pause relaxation</h2>
-              <p>Lancez une ambiance, fermez les yeux et laissez le timer vous guider.</p>
+                <div class="meditation-circle breath-circle">
+                  <strong>Inspire</strong>
+                </div>
 
-              <div class="sound-list">
-                <div class="sound">
-                  <div class="sound-icon">🎨</div>
-                  <div><strong>Bruits colorés</strong><span>Blanc, Rose, Marron, Bleu, Violet</span></div>
-                </div>
-                <div class="sound">
-                  <div class="sound-icon">🌿</div>
-                  <div><strong>Sons ambiants</strong><span>Pluie, Vent, Tonnerre, Grotte, Feu...</span></div>
-                </div>
-                <div class="sound">
-                  <div class="sound-icon">🐾</div>
-                  <div><strong>Animaux</strong><span>Oiseaux, Baleine, Grillons, Loup...</span></div>
-                </div>
-                <div class="sound">
-                  <div class="sound-icon">🌀</div>
-                  <div><strong>Fréquences</strong><span>174Hz, 285Hz, 396Hz, 417Hz...</span></div>
-                </div>
-                <div class="sound">
-                  <div class="sound-icon">🧠</div>
-                  <div><strong>Battements binauraux</strong><span>Delta, Thêta, Alpha, Bêta...</span></div>
-                </div>
-                <div class="sound">
-                  <div class="sound-icon">🎧</div>
-                  <div><strong>ASMR</strong><span>Ronronnement, Pages, Clavier...</span></div>
-                </div>
-                <div class="sound">
-                  <div class="sound-icon">🎚️</div>
-                  <div><strong>Votre mix sonore</strong><span>Assemble, additionne, gère le volume...</span></div>
+                <h2>Respiration</h2>
+                <p>Suivez le cercle : inspirez, retenez, expirez.</p>
+
+                <div class="sound-list">
+                  <div class="sound">
+                    <div class="sound-icon">💗</div>
+                    <div><strong>Cohérence 365</strong><span>Anti-stress · Inspire 5s / Expire 5s</span></div>
+                  </div>
+                  <div class="sound">
+                    <div class="sound-icon">🌙</div>
+                    <div><strong>4-7-8</strong><span>Sommeil · Inspire, retiens, expire</span></div>
+                  </div>
+                  <div class="sound">
+                    <div class="sound-icon">⬜</div>
+                    <div><strong>Respiration carrée</strong><span>Focus · 4 temps égaux</span></div>
+                  </div>
+                  <div class="sound">
+                    <div class="sound-icon">🎵</div>
+                    <div><strong>Fond sonore</strong><span>Pluie, ruisseau... ou silence</span></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="deux-modes">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Deux façons de faire une pause</div>
+          <h2 class="section-title">Écoutez. Ou respirez.</h2>
+          <p>ZenBreak réunit deux approches complémentaires de la détente, dans une seule application. À vous de choisir selon votre humeur et le moment.</p>
+        </div>
+
+        <div class="modes-grid">
+          <article class="mode-card mode-sound">
+            <div class="mode-head">
+              <div class="mode-icon">🎧</div>
+              <h3>Pause sonore</h3>
+            </div>
+            <p>Choisissez une durée, puis plongez dans un univers sonore : ambiances naturelles, ASMR, battements binauraux, fréquences, chants diphoniques, voyage musical… ou composez votre propre mix.</p>
+            <ul class="mode-list">
+              <li><span>✓</span> Plus de 100 sons, 60+ gratuits</li>
+              <li><span>✓</span> 10 catégories à découvrir</li>
+              <li><span>✓</span> Compositeur de mix personnalisé</li>
+              <li><span>✓</span> Mode sommeil &amp; fin en douceur</li>
+            </ul>
+          </article>
+
+          <article class="mode-card mode-breath">
+            <div class="mode-head">
+              <div class="mode-icon">🌬️</div>
+              <h3>Respiration guidée</h3>
+            </div>
+            <p>Laissez un cercle animé rythmer votre souffle. Inspirez, retenez, expirez : votre corps se cale naturellement sur le mouvement. 5 techniques pour s'apaiser, se concentrer ou s'endormir.</p>
+            <ul class="mode-list">
+              <li><span>✓</span> Cohérence cardiaque, 4-7-8, carrée…</li>
+              <li><span>✓</span> Cercle animé + fond sonore au choix</li>
+              <li><span>✓</span> Durée libre, rythme calculé pour vous</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pause-sonore">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">🎧 Pause sonore</div>
+          <h2 class="section-title">Un univers sonore, en quelques gestes.</h2>
+          <p>Choisissez votre durée, sélectionnez une ambiance, et laissez-vous porter. ZenBreak gère le reste : lecture en boucle, fin en douceur et interface immersive.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">⏱️</div>
+            <h3>Choisissez la durée</h3>
+            <p>Une pause courte de quelques minutes ou une longue session pour accompagner le sommeil, à vous de décider.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🎶</div>
+            <h3>Choisissez votre son</h3>
+            <p>10 catégories : ambiances naturelles, ASMR, battements binauraux, fréquences, chants diphoniques, voyage musical…</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🎚️</div>
+            <h3>Composez votre mix</h3>
+            <p>Combinez plusieurs sons et ajustez chaque volume pour créer votre univers sonore unique, rien qu'à vous.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🔔</div>
+            <h3>Laissez-vous guider</h3>
+            <p>Le son tourne pendant toute la session et un gong tibétain marque la fin en douceur, sans coupure brutale.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🌙</div>
+            <h3>Mode sommeil PRO</h3>
+            <p>Terminez la séance en silence total, sans gong, pour glisser tranquillement vers le sommeil.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">✈️</div>
+            <h3>100 % déconnecté</h3>
+            <p>Une fois la session lancée, activez le mode avion pour une pause sans notification ni distraction.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="respiration">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">🌬️ Respiration guidée</div>
+          <h2 class="section-title">Votre souffle, guidé en douceur.</h2>
+          <p>Suivez le cercle qui grandit à l'inspiration et se rétracte à l'expiration. Pas de comptage, pas d'effort : vous suivez le mouvement, l'application gère le rythme et la durée.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">💗</div>
+            <h3>Cohérence 365</h3>
+            <p>Inspire 5s, expire 5s. La référence anti-stress, validée scientifiquement, à pratiquer à tout moment de la journée.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🫧</div>
+            <h3>Abdominale</h3>
+            <p>Respiration douce par le ventre. Idéale pour débuter, pour les enfants ou pour se relâcher en fin de journée.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🌙</div>
+            <h3>4-7-8</h3>
+            <p>Inspire 4s, retiens 7s, expire 8s. L'expiration longue favorise l'endormissement : à pratiquer au lit, le soir.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">⬜</div>
+            <h3>Respiration carrée</h3>
+            <p>Quatre temps égaux. Utilisée par les sportifs et les forces spéciales pour garder leur sang-froid et se concentrer.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">😮‍💨</div>
+            <h3>Soupir physiologique</h3>
+            <p>Deux inspirations enchaînées puis une longue expiration. Le moyen le plus rapide de faire retomber la pression.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🎵</div>
+            <h3>Avec ou sans son</h3>
+            <p>Respirez en silence, ou ajoutez un fond apaisant (pluie, ruisseau, ambiance musicale) pour vous envelopper.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -883,47 +1164,6 @@
             <h3>Se recentrer</h3>
             <p>Des sons immersifs pour accompagner la concentration, la lecture, le travail ou une pause entre deux tâches.</p>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container feature-grid">
-        <article class="card large-card">
-          <div class="eyebrow">Expérience mobile</div>
-          <h2 class="section-title">Une interface immersive, simple et apaisante.</h2>
-          <p style="color: var(--muted);">ZenBreak mise sur une ambiance visuelle galaxie, un timer clair et des sons accessibles rapidement.</p>
-        </article>
-
-        <div class="feature-list">
-          <div class="feature-item">
-            <span>✓</span>
-            <div>
-              <h3>Sélectionnez une durée</h3>
-              <p>Une pause courte de 5 minutes ou une session plus longue pour accompagner le sommeil.</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span>✓</span>
-            <div>
-              <h3>Choisissez votre son</h3>
-              <p>Ambiances naturelles, fréquences, ASMR, chants diphoniques ou voyage musical selon votre besoin du moment.</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span>✓</span>
-            <div>
-              <h3>Créez votre mix</h3>
-              <p>Combinez plusieurs sons et ajustez les volumes pour créer votre univers sonore personnalisé.</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span>✓</span>
-            <div>
-              <h3>Laissez-vous guider</h3>
-              <p>Le son tourne en boucle pendant la session et un gong indique naturellement la fin du moment.</p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -987,7 +1227,11 @@
         <div class="faq">
           <details>
             <summary>ZenBreak est-elle une application de méditation ?</summary>
-            <p>ZenBreak est surtout une application de pause, de relaxation et d'ambiance sonore. Elle peut accompagner une méditation, une respiration calme, un moment de détente ou votre sommeil.</p>
+            <p>ZenBreak est une application de pause, de relaxation, de respiration guidée et d'ambiance sonore. Elle propose deux modes : des pauses sonores immersives et des exercices de respiration guidée. Elle peut accompagner une méditation, un moment de détente ou votre sommeil.</p>
+          </details>
+          <details>
+            <summary>Comment fonctionne la respiration guidée ?</summary>
+            <p>Vous choisissez une durée puis une technique (cohérence cardiaque 365, respiration abdominale, 4-7-8, respiration carrée ou soupir physiologique). Un cercle animé vous guide : il grandit à l'inspiration, se stabilise lors des pauses et se rétracte à l'expiration. Vous pouvez ajouter un fond sonore apaisant ou respirer en silence. 2 techniques sont gratuites, les autres sont réservées aux abonnés PRO.</p>
           </details>
           <details>
             <summary>Quels sons trouve-t-on dans ZenBreak ?</summary>
@@ -1055,15 +1299,15 @@
     <div class="container footer-inner">
       <div>
         <strong>ZenBreak</strong> — Une application Code Nature<br />
-        <small>Relaxation, sommeil, sons naturels et pauses bien-être.</small>
+        <small>Relaxation, respiration guidée, sommeil et sons naturels.</small>
       </div>
       <div class="footer-links">
-        <a href="#bienfaits">Bienfaits</a>
+        <a href="#respiration">Respiration</a>
         <a href="#sons">Sons</a>
         <a href="#faq">FAQ</a>
         <a href="politique-de-confidentialite.html">Confidentialité</a>
         <a href="conditions-utilisation.html">CGU</a>
-        <a href="mailto:zenbreak.app@gmail.com">Contact</a>
+        <a href="mailto:code.nature81@gmail.com">Contact</a>
       </div>
     </div>
   </footer>
